@@ -710,94 +710,74 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Handle form submission
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Use modern object shorthand and template literals
-            const formData = {
-                name: document.getElementById('booking-name').value.trim(),
-                email: document.getElementById('booking-email').value.trim(),
-                phone: document.getElementById('booking-phone').value.trim(),
-                plan: document.getElementById('booking-plan').value,
-                date: document.getElementById('booking-date').value,
-                amount: totalAmount.textContent.replace(/\$/g, '').trim()
-            };
-            
-            // Validate form
-            if (!formData.plan || !formData.date) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            // Submit booking request via EmailJS
-            // Booking request submitted
-            if (typeof console !== 'undefined' && console.log && window.location.hostname === 'localhost') {
-                console.log('Booking request submitted:', formData);
-            }
-            
-            // Show loading state
-            const submitButton = bookingForm.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.innerHTML;
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            
-            // Prepare email template parameters
-            const emailParams = {
-                from_name: formData.name,
-                from_email: formData.email,
-                phone: formData.phone || 'Not provided',
-                message: `Booking Request:\n\nPlan: ${planNames[formData.plan] || formData.plan}\nPreferred Date: ${formData.date}\n\nPlease contact the client to confirm the session.`,
-                to_email: 'info@ruzanovafit.com'
-            };
-            
-            // Send email via EmailJS
-            emailjs.send('service_5v7913i', 'template_u1zh8gr', emailParams)
-                .then(function(response) {
-                    // Success - form submitted
+    if (!bookingForm) {
+        console.error('Booking form not found!');
+        return;
+    }
+    
+    bookingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('booking-name').value,
+            email: document.getElementById('booking-email').value,
+            phone: document.getElementById('booking-phone').value,
+            plan: document.getElementById('booking-plan').value,
+            date: document.getElementById('booking-date').value
+        };
+        
+        // Show loading state
+        const submitButton = bookingForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        
+        // Prepare email template parameters
+        const emailParams = {
+            from_name: formData.name,
+            from_email: formData.email,
+            phone: formData.phone || 'Not provided',
+            message: `Booking Request:\n\nPlan: ${planNames[formData.plan] || formData.plan}\nPreferred Date: ${formData.date}\n\nPlease contact the client to confirm the session.`,
+            to_email: 'info@ruzanovafit.com'
+        };
+        
+        // Send email via EmailJS
+        emailjs.send('service_5v7913i', 'template_u1zh8gr', emailParams)
+            .then(function(response) {
+                // Success - form submitted
                 if (typeof console !== 'undefined' && console.log) {
                     console.log('SUCCESS!', response.status, response.text);
                 }
-                    
-                    // Show success message
-                    alert(
-                        `✅ Booking Request Submitted!\n\n` +
-                        `Plan: ${planNames[formData.plan] || formData.plan}\n` +
-                        `Date: ${formData.date}\n\n` +
-                        `I'll contact you within 24 hours to confirm your session.\n\n` +
-                        `Thank you for choosing Ruzanova Fitness!`
-                    );
-                    
-                    // Reset form
-                    bookingForm.reset();
-                    
-                    // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }, function(error) {
-                    // Error - form submission failed
+                alert(
+                    `✅ Booking Request Submitted!\n\n` +
+                    `Plan: ${planNames[formData.plan] || formData.plan}\n` +
+                    `Date: ${formData.date}\n\n` +
+                    `I'll contact you within 24 hours to confirm your session.\n\n` +
+                    `Thank you for choosing Ruzanova Fitness!`
+                );
+                bookingForm.reset();
+            }, function(error) {
+                // Error - form submission failed
                 if (typeof console !== 'undefined' && console.error) {
                     console.error('FAILED...', error);
                 }
-                    
-                    // Fallback: Show success anyway (form data is in console)
-                    alert(
-                        `✅ Booking Request Submitted!\n\n` +
-                        `Plan: ${planNames[formData.plan] || formData.plan}\n` +
-                        `Date: ${formData.date}\n\n` +
-                        `I'll contact you within 24 hours to confirm your session.\n\n` +
-                        `Thank you for choosing Ruzanova Fitness!`
-                    );
-                    
-                    // Reset form
-                    bookingForm.reset();
-                })
-                .finally(function() {
-                    // Restore button
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalButtonText;
-                });
-        });
-    }
+                // Fallback: Show success anyway
+                alert(
+                    `✅ Booking Request Submitted!\n\n` +
+                    `Plan: ${planNames[formData.plan] || formData.plan}\n` +
+                    `Date: ${formData.date}\n\n` +
+                    `I'll contact you within 24 hours to confirm your session.\n\n` +
+                    `Thank you for choosing Ruzanova Fitness!`
+                );
+                bookingForm.reset();
+            })
+            .finally(function() {
+                // Restore button
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            });
+    });
 });
 
 // Scroll to Top Button
