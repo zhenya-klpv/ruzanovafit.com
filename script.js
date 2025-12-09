@@ -746,15 +746,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailParams = {
                 from_name: formData.name,
                 from_email: formData.email,
-                phone: formData.phone,
-                plan: planNames[formData.plan] || formData.plan,
-                date: formData.date,
-                to_email: 'info@ruzanovafit.com' // TODO: Replace with your email
+                phone: formData.phone || 'Not provided',
+                message: `Booking Request:\n\nPlan: ${planNames[formData.plan] || formData.plan}\nPreferred Date: ${formData.date}\n\nPlease contact the client to confirm the session.`,
+                to_email: 'info@ruzanovafit.com'
             };
             
             // Send email via EmailJS
-            // TODO: Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your EmailJS credentials
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams)
+            emailjs.send('service_5v7913i', 'template_u1zh8gr', emailParams)
                 .then(function(response) {
                     // Success - form submitted
                 if (typeof console !== 'undefined' && console.log) {
@@ -765,8 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(
                         `✅ Booking Request Submitted!\n\n` +
                         `Plan: ${planNames[formData.plan] || formData.plan}\n` +
-                        `Date: ${formData.date}\n` +
-                        `Time: ${formData.time}\n\n` +
+                        `Date: ${formData.date}\n\n` +
                         `I'll contact you within 24 hours to confirm your session.\n\n` +
                         `Thank you for choosing Ruzanova Fitness!`
                     );
@@ -786,8 +783,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(
                         `✅ Booking Request Submitted!\n\n` +
                         `Plan: ${planNames[formData.plan] || formData.plan}\n` +
-                        `Date: ${formData.date}\n` +
-                        `Time: ${formData.time}\n\n` +
+                        `Date: ${formData.date}\n\n` +
                         `I'll contact you within 24 hours to confirm your session.\n\n` +
                         `Thank you for choosing Ruzanova Fitness!`
                     );
