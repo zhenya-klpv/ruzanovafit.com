@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book your personal training session online. Secure payment processing.">
+    <title>Book Your Session | Ruzanova Fitness</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="index.html" class="logo-link">
+                        <span class="logo-text">Ruzanova Fitness</span>
+                    </a>
+                </div>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="index.html#services" class="nav-link">Services</a></li>
+                    <li><a href="index.html#pricing" class="nav-link">Pricing</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Booking & Payment Section -->
+    <section id="booking" class="booking" style="padding-top: 140px;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Book Your Session</h2>
+                <p class="section-subtitle">Secure online booking and payment</p>
+            </div>
+            <div class="booking-content">
+                <div class="booking-info">
+                    <h3>Payment Methods</h3>
+                    <p>We accept all major payment methods for your convenience:</p>
+                    <div class="payment-methods">
+                        <div class="payment-method">
+                            <i class="fab fa-cc-visa"></i>
+                            <span>Visa</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-mastercard"></i>
+                            <span>Mastercard</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-amex"></i>
+                            <span>American Express</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-paypal"></i>
+                            <span>PayPal</span>
+                        </div>
+                        <div class="payment-method">
+                            <i class="fab fa-cc-stripe"></i>
+                            <span>Stripe</span>
+                        </div>
+                    </div>
+                    <div class="security-info">
+                        <i class="fas fa-lock"></i>
+                        <span>All payments are secure and encrypted</span>
+                    </div>
+                    <div class="booking-features">
+                        <h4>What's Included:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Instant confirmation</li>
+                            <li><i class="fas fa-check"></i> Secure payment processing</li>
+                            <li><i class="fas fa-check"></i> Email receipt</li>
+                            <li><i class="fas fa-check"></i> Calendar reminder</li>
+                            <li><i class="fas fa-check"></i> 24/7 customer support</li>
+                        </ul>
+                    </div>
+                </div>
+                <form class="booking-form" id="bookingForm">
+                    <h3>Booking Details</h3>
+                    <div class="form-group">
+                        <label for="booking-name">Full Name *</label>
+                        <input type="text" id="booking-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-email">Email *</label>
+                        <input type="email" id="booking-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-phone">Phone *</label>
+                        <input type="tel" id="booking-phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-plan">Training Plan *</label>
+                        <select id="booking-plan" name="plan" required>
+                            <option value="">Select a plan</option>
+                            <option value="starter" data-price="99">Starter - $99/session</option>
+                            <option value="premium" data-price="299">Premium - $299/month</option>
+                            <option value="elite" data-price="499">Elite - $499/month</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-date">Preferred Date *</label>
+                        <input type="date" id="booking-date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-time">Preferred Time *</label>
+                        <select id="booking-time" name="time" required>
+                            <option value="">Select time</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
+                            <option value="18:00">6:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="booking-notes">Additional Notes</label>
+                        <textarea id="booking-notes" name="notes" rows="3" placeholder="Any special requests or information..."></textarea>
+                    </div>
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span>Selected Plan:</span>
+                            <span id="selected-plan-name">-</span>
+                        </div>
+                        <div class="price-row total">
+                            <span>Total Amount:</span>
+                            <span id="total-amount">$0</span>
+                        </div>
+                    </div>
+                    <div class="payment-buttons">
+                        <button type="submit" class="btn btn-primary btn-block" id="payButton">
+                            <i class="fas fa-credit-card"></i> Proceed to Payment
+                        </button>
+                        <p class="payment-note">You will be redirected to secure payment page</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ruzanova Fitness</h3>
+                    <p>Your personal fitness trainer in California. Achieve your goals with me!</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Social Media</h3>
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/iamruzanova/" target="_blank" class="social-icon" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" target="_blank" class="social-icon" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Ruzanova Fitness. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

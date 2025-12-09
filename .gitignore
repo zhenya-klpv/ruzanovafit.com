@@ -1,0 +1,22 @@
+# Documentation files
+*.md
+DEPLOYMENT.md
+EMAIL_SETUP.md
+INSTAGRAM_SETUP.md
+OPTIMIZATION_GUIDE.md
+PERFORMANCE_IMPROVEMENTS.md
+QUICK_DEPLOY.md
+IMPROVEMENTS.md
+FAVICON_README.md
+
+# Development tools
+FAVICON_GENERATOR.html
+generate_favicons.py
+build-optimize.sh
+
+# Temporary files
+favicon_new.svg
+*.log
+.DS_Store
+Thumbs.db
+
