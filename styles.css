@@ -94,9 +94,9 @@ body {
         line-height: 1.7;
     }
     
-    /* Improved mobile spacing - priority */
+    /* Improved mobile spacing - priority for iPhone */
     section {
-        padding: 60px 0 !important;
+        padding: 100px 0 !important;
         min-height: auto !important;
         height: auto !important;
         display: block !important;
@@ -105,20 +105,20 @@ body {
     /* Add proper spacing between sections on mobile */
     section + section {
         margin-top: 0 !important;
-        padding-top: 60px !important;
+        padding-top: 100px !important;
     }
     
     .section-header {
-        margin-bottom: 40px;
+        margin-bottom: 60px;
         margin-top: 0;
-        padding-top: 40px;
+        padding-top: 60px;
         padding-left: 0;
         padding-right: 0;
     }
     
     /* First section after hero should have more spacing */
     .hero + section .section-header {
-        padding-top: 40px;
+        padding-top: 60px;
     }
     
     .section-title {
@@ -654,7 +654,7 @@ a.btn.btn-hero-primary:hover::before {
 
 /* Section Styles */
 section {
-    padding: 120px 0;
+    padding: 140px 0;
     position: relative;
     margin: 0 !important;
     min-height: 100vh;
@@ -686,13 +686,21 @@ section {
 /* Cross-platform spacing fixes */
 @media (max-width: 1200px) {
     section {
-        padding: 100px 0;
+        padding: 120px 0;
+    }
+    
+    section + section {
+        padding-top: 120px;
     }
 }
 
 @media (max-width: 992px) {
     section {
-        padding: 90px 0;
+        padding: 100px 0;
+    }
+    
+    section + section {
+        padding-top: 100px;
     }
 }
 
@@ -702,7 +710,7 @@ section.visible {
     transform: translateY(0);
 }
 
-/* Remove gaps between sections - strict rules */
+/* Proper spacing between sections */
 section + section {
     margin-top: 0 !important;
     padding-top: 0 !important;
@@ -710,6 +718,17 @@ section + section {
     padding-bottom: 0 !important;
     border-top: none !important;
     border-bottom: none !important;
+}
+
+/* Add spacing between sections on desktop */
+@media (min-width: 769px) {
+    section {
+        padding: 140px 0;
+    }
+    
+    section + section {
+        padding-top: 140px;
+    }
 }
 
 /* Ensure sections are tightly connected */
@@ -1576,20 +1595,22 @@ section {
 
 @media (max-width: 768px) {
     .testimonials {
-        padding: 60px 0 !important;
+        padding: 100px 0 !important;
         overflow: visible;
         min-height: auto !important;
     }
     
     .testimonials-carousel-wrapper {
         padding: 0 50px !important;
-        margin-top: 30px !important;
+        margin-top: 40px !important;
         position: relative;
         overflow: visible;
+        max-width: 100%;
     }
     
     .testimonials-carousel {
         overflow: visible;
+        max-width: 100%;
     }
     
     .testimonials-grid {
@@ -1602,6 +1623,7 @@ section {
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        max-width: 100%;
     }
     
     .testimonials-grid::-webkit-scrollbar {
@@ -2455,7 +2477,7 @@ a:focus-visible {
     flex-direction: column;
     position: relative;
     z-index: 10;
-    overflow: hidden;
+    overflow: visible;
     margin: 0;
     border-top: none;
     border-bottom: none;
@@ -2464,18 +2486,23 @@ a:focus-visible {
 .pricing-carousel-wrapper {
     position: relative;
     margin-top: 80px;
-    padding: 0 80px;
+    padding: 0 100px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pricing-carousel {
-    overflow: hidden;
+    overflow: visible;
     position: relative;
 }
 
 .pricing-grid {
     display: flex;
-    gap: 40px;
+    gap: 30px;
     transition: transform 0.5s ease-in-out;
+    align-items: stretch;
+    min-height: 600px;
 }
 
 .pricing-grid.animating {
@@ -2483,29 +2510,45 @@ a:focus-visible {
 }
 
 .pricing-card {
-    flex: 0 0 calc(25% - 30px);
-    min-width: 280px;
-    max-width: 320px;
+    flex: 0 0 calc(25% - 22.5px);
+    min-width: 0;
+    max-width: none;
+    width: auto;
+}
+
+@media (max-width: 1400px) {
+    .pricing-carousel-wrapper {
+        padding: 0 80px;
+    }
 }
 
 @media (max-width: 1200px) {
     .pricing-card {
-        flex: 0 0 calc(33.333% - 27px);
+        flex: 0 0 calc(33.333% - 20px);
     }
     .pricing-carousel-wrapper {
-        padding: 0 60px;
+        padding: 0 70px;
     }
     .pricing-carousel-btn-prev {
-        left: -40px;
+        left: -35px;
     }
     .pricing-carousel-btn-next {
-        right: -40px;
+        right: -35px;
     }
 }
 
 @media (max-width: 992px) {
     .pricing-card {
-        flex: 0 0 calc(50% - 20px);
+        flex: 0 0 calc(50% - 15px);
+    }
+    .pricing-carousel-wrapper {
+        padding: 0 60px;
+    }
+    .pricing-carousel-btn-prev {
+        left: -30px;
+    }
+    .pricing-carousel-btn-next {
+        right: -30px;
     }
 }
 
@@ -2557,6 +2600,11 @@ a:focus-visible {
     padding: 50px 40px;
     position: relative;
     transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    height: 100%;
+    min-height: 500px;
     /* Removed will-change - only add on hover */
 }
 
@@ -2572,11 +2620,12 @@ a:focus-visible {
 
 @media (min-width: 1201px) {
     .pricing-card.featured {
-        transform: scale(1.05);
+        /* Removed scale to prevent clipping */
+        border-width: 3px;
     }
     
     .pricing-card.featured:hover {
-        transform: scale(1.05) translateY(-10px);
+        transform: translateY(-10px);
     }
 }
 
@@ -2593,10 +2642,15 @@ a:focus-visible {
     transform: translateX(-50%);
     background-color: var(--text-dark);
     color: var(--white);
-    padding: 8px 20px;
-    font-size: 12px;
-    letter-spacing: 0.1em;
+    padding: 10px 24px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
+    z-index: 15;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
 }
 
 .pricing-header {
@@ -2640,6 +2694,13 @@ a:focus-visible {
 .pricing-features {
     list-style: none;
     margin-bottom: 40px;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.pricing-card .btn {
+    margin-top: auto;
+    align-self: stretch;
 }
 
 .pricing-features li {
@@ -2667,27 +2728,49 @@ a:focus-visible {
 
 @media (max-width: 768px) {
     .pricing {
-        padding: 60px 0 !important;
+        padding: 100px 0 !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
         min-height: auto !important;
+        overflow: visible !important;
     }
     
     .pricing-carousel-wrapper {
         padding: 0 50px !important;
-        margin-top: 30px !important;
+        margin-top: 40px !important;
+        overflow: visible !important;
+    }
+    
+    .pricing-carousel {
+        overflow: visible !important;
+    }
+    
+    .pricing-grid {
+        min-height: auto !important;
     }
     
     .pricing-card {
         padding: 35px 25px !important;
-        display: block !important;
+        padding-top: 45px !important;
+        display: flex !important;
+        flex-direction: column !important;
         visibility: visible !important;
         opacity: 1 !important;
         width: 100% !important;
         flex: 0 0 100% !important;
         min-width: 100% !important;
         max-width: 100% !important;
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    .popular-badge {
+        top: -12px !important;
+        padding: 8px 18px !important;
+        font-size: 10px !important;
+        z-index: 25 !important;
     }
     
     .pricing-header {
@@ -2702,12 +2785,17 @@ a:focus-visible {
     
     .pricing-features {
         margin-bottom: 25px;
+        flex-grow: 1;
     }
     
     .pricing-features li {
         font-size: 14px;
         margin-bottom: 10px;
         line-height: 1.6;
+    }
+    
+    .pricing-card .btn {
+        margin-top: auto;
     }
     
     .pricing-carousel-btn-prev,
