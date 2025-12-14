@@ -716,7 +716,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const planNames = {
         'starter': 'Starter',
         'premium': 'Premium',
-        'elite': 'Elite'
+        'elite': 'Elite',
+        'nutrition': 'Nutrition'
     };
     
     // Handle URL parameters for pre-selecting plan
