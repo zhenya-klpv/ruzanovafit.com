@@ -695,9 +695,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Plan names mapping
     const planNames = {
-        'starter': 'Starter - $99/session',
-        'premium': 'Premium - $299/month',
-        'elite': 'Elite - $499/month'
+        'starter': 'Starter',
+        'premium': 'Premium',
+        'elite': 'Elite'
     };
     
     // Handle URL parameters for pre-selecting plan
