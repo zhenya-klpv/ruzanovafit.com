@@ -90,7 +90,7 @@ body {
     
     /* Improved mobile spacing */
     section {
-        padding: 60px 0;
+        padding: 80px 0;
         min-height: auto;
         height: auto;
     }
@@ -98,11 +98,18 @@ body {
     /* Add proper spacing between sections on mobile */
     section + section {
         margin-top: 0;
-        padding-top: 60px;
+        padding-top: 80px;
     }
     
     .section-header {
-        margin-bottom: 40px;
+        margin-bottom: 50px;
+        margin-top: 0;
+        padding-top: 60px;
+    }
+    
+    /* First section after hero should have more spacing */
+    .hero + section .section-header {
+        padding-top: 60px;
     }
     
     .section-title {
@@ -718,6 +725,8 @@ section {
     padding: 0 20px; /* Improved spacing for mobile */
     position: relative;
     z-index: 2;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .section-title {
@@ -1540,18 +1549,43 @@ section {
 
 @media (max-width: 768px) {
     .testimonials {
-        padding: 60px 0;
+        padding: 80px 0;
+        overflow: visible;
     }
     
     .testimonials-carousel-wrapper {
-        padding: 0 50px;
-        margin-top: 40px;
+        padding: 0 60px;
+        margin-top: 50px;
+        position: relative;
+        overflow: visible;
+    }
+    
+    .testimonials-carousel {
+        overflow: visible;
+    }
+    
+    .testimonials-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .testimonials-grid::-webkit-scrollbar {
+        display: none;
     }
     
     .testimonial-card {
-        flex: 0 0 100%;
-        min-width: 100%;
+        flex: 0 0 calc(100% - 40px);
+        min-width: calc(100% - 40px);
+        max-width: calc(100% - 40px);
         padding: 40px 30px;
+        scroll-snap-align: start;
     }
     
     .testimonial-text {
@@ -1579,30 +1613,42 @@ section {
     }
     
     .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 14px;
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+        z-index: 20;
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
+    
+    .carousel-btn:active {
+        transform: translateY(-50%) scale(0.9);
+    }
+    
     .carousel-btn-prev {
-        left: 5px;
+        left: 10px;
     }
+    
     .carousel-btn-next {
-        right: 5px;
+        right: 10px;
     }
 }
 
 @media (max-width: 480px) {
     .testimonials {
-        padding: 50px 0;
+        padding: 80px 0;
     }
     
     .testimonials-carousel-wrapper {
-        padding: 0 45px;
-        margin-top: 30px;
+        padding: 0 50px;
+        margin-top: 40px;
     }
     
     .testimonial-card {
-        padding: 30px 20px;
+        padding: 35px 25px;
+        flex: 0 0 calc(100% - 20px);
+        min-width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
     }
     
     .testimonial-text {
@@ -1631,15 +1677,15 @@ section {
     }
     
     .carousel-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 12px;
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
     }
     .carousel-btn-prev {
-        left: 2px;
+        left: 5px;
     }
     .carousel-btn-next {
-        right: 2px;
+        right: 5px;
     }
 }
 
@@ -2387,11 +2433,22 @@ a:focus-visible {
 
 .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 40px;
     max-width: 1100px;
     margin: 0 auto;
     margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-top: 50px;
+        max-width: 100%;
+        width: 100%;
+        display: grid !important;
+    }
 }
 
 .pricing-card {
@@ -2499,28 +2556,33 @@ a:focus-visible {
 
 @media (max-width: 768px) {
     .pricing {
-        padding: 60px 0 80px 0;
-    }
-    
-    .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        margin-top: 40px;
-        max-width: 100%;
+        padding: 80px 0;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .pricing-card {
         padding: 40px 30px;
         min-width: 100%;
         width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        margin-bottom: 30px;
+    }
+    
+    .pricing-header {
+        margin-bottom: 30px;
     }
     
     .pricing-header h3 {
         font-size: 24px;
+        margin-bottom: 0;
     }
     
-    .amount {
-        font-size: 48px;
+    .pricing-features {
+        margin-bottom: 30px;
     }
     
     .pricing-features li {
@@ -2531,32 +2593,31 @@ a:focus-visible {
 
 @media (max-width: 480px) {
     .pricing {
-        padding: 50px 0 60px 0;
+        padding: 80px 0;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .pricing-grid {
         gap: 25px;
-        margin-top: 30px;
+        margin-top: 40px;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
     }
     
     .pricing-card {
-        padding: 30px 20px;
+        padding: 35px 25px;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
     }
     
     .pricing-header h3 {
         font-size: 22px;
-    }
-    
-    .amount {
-        font-size: 42px;
-    }
-    
-    .currency {
-        font-size: 20px;
-    }
-    
-    .period {
-        font-size: 14px;
     }
     
     .pricing-features li {

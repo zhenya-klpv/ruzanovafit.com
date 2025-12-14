@@ -599,8 +599,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = carousel.querySelectorAll('.testimonial-card');
     const totalCards = cards.length;
     
+    // Check if mobile
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+    
     // Calculate how many cards are visible at once
     function getVisibleCards() {
+        if (isMobile()) {
+            return 1; // On mobile, show one card at a time
+        }
         const cardWidth = cards[0]?.offsetWidth || 320;
         const gap = 40;
         const containerWidth = carousel.parentElement.offsetWidth;
@@ -614,11 +622,22 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIndex = Math.min(currentIndex, maxIndex);
         currentIndex = Math.max(0, currentIndex);
         
-        const cardWidth = cards[0]?.offsetWidth || 320;
-        const gap = 40;
-        const translateX = -(currentIndex * (cardWidth + gap));
+        if (isMobile()) {
+            // On mobile, use percentage-based translation
+            const translateX = -(currentIndex * 100);
+            carousel.style.transform = `translateX(${translateX}%)`;
+        } else {
+            const cardWidth = cards[0]?.offsetWidth || 320;
+            const gap = 40;
+            const translateX = -(currentIndex * (cardWidth + gap));
+            carousel.style.transform = `translateX(${translateX}px)`;
+        }
         
-        carousel.style.transform = `translateX(${translateX}px)`;
+        // Add animating class for smooth transition
+        carousel.classList.add('animating');
+        setTimeout(() => {
+            carousel.classList.remove('animating');
+        }, 500);
         
         // Update button states
         prevBtn.disabled = currentIndex === 0;
