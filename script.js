@@ -619,18 +619,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCarousel() {
         const visibleCards = getVisibleCards();
         const maxIndex = Math.max(0, totalCards - visibleCards);
-        currentIndex = Math.min(currentIndex, maxIndex);
-        currentIndex = Math.max(0, currentIndex);
+        
+        // If all cards fit, don't use carousel
+        if (totalCards <= visibleCards) {
+            carousel.style.transform = 'translateX(0)';
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            return;
+        } else {
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+        }
+        
+        // Infinite loop: wrap around if out of bounds
+        if (currentIndex < 0) {
+            currentIndex = maxIndex;
+        } else if (currentIndex > maxIndex) {
+            currentIndex = 0;
+        }
         
         if (isMobile()) {
             // On mobile, use percentage-based translation
             const translateX = -(currentIndex * 100);
             carousel.style.transform = `translateX(${translateX}%)`;
         } else {
-            const cardWidth = cards[0]?.offsetWidth || 320;
-            const gap = 40;
-            const translateX = -(currentIndex * (cardWidth + gap));
-            carousel.style.transform = `translateX(${translateX}px)`;
+            // Calculate actual card width including gap
+            // Wait for cards to be rendered
+            if (cards.length > 0 && cards[0].offsetWidth > 0) {
+                const gap = 40; // Match CSS gap
+                const cardWidth = cards[0].offsetWidth;
+                const translateX = -(currentIndex * (cardWidth + gap));
+                carousel.style.transform = `translateX(${translateX}px)`;
+            } else {
+                // Fallback: use percentage if cards not yet rendered
+                const translateX = -(currentIndex * (100 / visibleCards));
+                carousel.style.transform = `translateX(${translateX}%)`;
+            }
         }
         
         // Add animating class for smooth transition
@@ -639,31 +663,41 @@ document.addEventListener('DOMContentLoaded', () => {
             carousel.classList.remove('animating');
         }, 500);
         
-        // Update button states
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex >= maxIndex;
+        // Infinite carousel - buttons are always enabled
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
     }
     
-    // Next button
+    // Next button - infinite loop
     nextBtn.addEventListener('click', () => {
         const visibleCards = getVisibleCards();
         const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (currentIndex < maxIndex) {
+        if (totalCards > visibleCards) {
             currentIndex++;
+            if (currentIndex > maxIndex) {
+                currentIndex = 0; // Loop to start
+            }
             updateCarousel();
         }
     });
     
-    // Previous button
+    // Previous button - infinite loop
     prevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        if (totalCards > visibleCards) {
             currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = maxIndex; // Loop to end
+            }
             updateCarousel();
         }
     });
     
-    // Initialize
-    updateCarousel();
+    // Initialize after a short delay to ensure cards are rendered
+    setTimeout(() => {
+        updateCarousel();
+    }, 100);
     
     // Update on window resize
     let resizeTimeout;
@@ -672,6 +706,11 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeTimeout = setTimeout(() => {
             updateCarousel();
         }, 250);
+    });
+    
+    // Also update when images/content loads
+    window.addEventListener('load', () => {
+        updateCarousel();
     });
 });
 
@@ -710,18 +749,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCarousel() {
         const visibleCards = getVisibleCards();
         const maxIndex = Math.max(0, totalCards - visibleCards);
-        currentIndex = Math.min(currentIndex, maxIndex);
-        currentIndex = Math.max(0, currentIndex);
+        
+        // If all cards fit, don't use carousel
+        if (totalCards <= visibleCards) {
+            pricingCarousel.style.transform = 'translateX(0)';
+            pricingPrevBtn.style.display = 'none';
+            pricingNextBtn.style.display = 'none';
+            return;
+        } else {
+            pricingPrevBtn.style.display = 'flex';
+            pricingNextBtn.style.display = 'flex';
+        }
+        
+        // Infinite loop: wrap around if out of bounds
+        if (currentIndex < 0) {
+            currentIndex = maxIndex;
+        } else if (currentIndex > maxIndex) {
+            currentIndex = 0;
+        }
         
         if (isMobile()) {
             // On mobile, use percentage-based translation
             const translateX = -(currentIndex * 100);
             pricingCarousel.style.transform = `translateX(${translateX}%)`;
         } else {
-            const cardWidth = cards[0]?.offsetWidth || 280;
-            const gap = 40;
-            const translateX = -(currentIndex * (cardWidth + gap));
-            pricingCarousel.style.transform = `translateX(${translateX}px)`;
+            // Calculate actual card width including gap
+            // Wait for cards to be rendered
+            if (cards.length > 0 && cards[0].offsetWidth > 0) {
+                const gap = 25; // Match CSS gap
+                const cardWidth = cards[0].offsetWidth;
+                const translateX = -(currentIndex * (cardWidth + gap));
+                pricingCarousel.style.transform = `translateX(${translateX}px)`;
+            } else {
+                // Fallback: use percentage if cards not yet rendered
+                const translateX = -(currentIndex * (100 / visibleCards));
+                pricingCarousel.style.transform = `translateX(${translateX}%)`;
+            }
         }
         
         // Add animating class for smooth transition
@@ -730,31 +793,41 @@ document.addEventListener('DOMContentLoaded', () => {
             pricingCarousel.classList.remove('animating');
         }, 500);
         
-        // Update button states
-        pricingPrevBtn.disabled = currentIndex === 0;
-        pricingNextBtn.disabled = currentIndex >= maxIndex;
+        // Infinite carousel - buttons are always enabled
+        pricingPrevBtn.disabled = false;
+        pricingNextBtn.disabled = false;
     }
     
-    // Next button
+    // Next button - infinite loop
     pricingNextBtn.addEventListener('click', () => {
         const visibleCards = getVisibleCards();
         const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (currentIndex < maxIndex) {
+        if (totalCards > visibleCards) {
             currentIndex++;
+            if (currentIndex > maxIndex) {
+                currentIndex = 0; // Loop to start
+            }
             updateCarousel();
         }
     });
     
-    // Previous button
+    // Previous button - infinite loop
     pricingPrevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        if (totalCards > visibleCards) {
             currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = maxIndex; // Loop to end
+            }
             updateCarousel();
         }
     });
     
-    // Initialize
-    updateCarousel();
+    // Initialize after a short delay to ensure cards are rendered
+    setTimeout(() => {
+        updateCarousel();
+    }, 100);
     
     // Update on window resize
     let resizeTimeout;
@@ -763,6 +836,122 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeTimeout = setTimeout(() => {
             updateCarousel();
         }, 250);
+    });
+    
+    // Also update when images/content loads
+    window.addEventListener('load', () => {
+        updateCarousel();
+    });
+});
+
+// Services Carousel
+document.addEventListener('DOMContentLoaded', () => {
+    const servicesCarousel = document.querySelector('.services-grid');
+    const servicesPrevBtn = document.querySelector('.services-carousel-btn-prev');
+    const servicesNextBtn = document.querySelector('.services-carousel-btn-next');
+    
+    if (!servicesCarousel || !servicesPrevBtn || !servicesNextBtn) return;
+    
+    let currentIndex = 0;
+    const cards = servicesCarousel.querySelectorAll('.service-card');
+    const totalCards = cards.length;
+    
+    // Check if mobile
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+    
+    // Calculate how many cards are visible at once
+    function getVisibleCards() {
+        if (isMobile()) {
+            return 1; // On mobile, show one card at a time
+        }
+        return totalCards; // On desktop, show all cards
+    }
+    
+    // Update carousel position
+    function updateCarousel() {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        
+        // If all cards fit, don't use carousel
+        if (totalCards <= visibleCards || !isMobile()) {
+            servicesCarousel.style.transform = 'translateX(0)';
+            servicesPrevBtn.style.display = 'none';
+            servicesNextBtn.style.display = 'none';
+            return;
+        } else {
+            servicesPrevBtn.style.display = 'flex';
+            servicesNextBtn.style.display = 'flex';
+        }
+        
+        // Infinite loop: wrap around if out of bounds
+        if (currentIndex < 0) {
+            currentIndex = maxIndex;
+        } else if (currentIndex > maxIndex) {
+            currentIndex = 0;
+        }
+        
+        if (isMobile()) {
+            // On mobile, use percentage-based translation
+            const translateX = -(currentIndex * 100);
+            servicesCarousel.style.transform = `translateX(${translateX}%)`;
+        }
+        
+        // Add animating class for smooth transition
+        servicesCarousel.classList.add('animating');
+        setTimeout(() => {
+            servicesCarousel.classList.remove('animating');
+        }, 500);
+        
+        // Infinite carousel - buttons are always enabled
+        servicesPrevBtn.disabled = false;
+        servicesNextBtn.disabled = false;
+    }
+    
+    // Next button - infinite loop
+    servicesNextBtn.addEventListener('click', () => {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        if (totalCards > visibleCards && isMobile()) {
+            currentIndex++;
+            if (currentIndex > maxIndex) {
+                currentIndex = 0; // Loop to start
+            }
+            updateCarousel();
+        }
+    });
+    
+    // Previous button - infinite loop
+    servicesPrevBtn.addEventListener('click', () => {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        if (totalCards > visibleCards && isMobile()) {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = maxIndex; // Loop to end
+            }
+            updateCarousel();
+        }
+    });
+    
+    // Initialize after a short delay to ensure cards are rendered
+    setTimeout(() => {
+        updateCarousel();
+    }, 100);
+    
+    // Update on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateCarousel();
+        }, 250);
+    });
+    
+    // Also update when images/content loads
+    window.addEventListener('load', () => {
+        updateCarousel();
     });
 });
 
@@ -1219,8 +1408,102 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const specialtyWrappers = document.querySelectorAll('.specialty-tag-wrapper');
     
+    // Function to adjust tooltip position to stay within viewport
+    function adjustTooltipPosition(tooltip, wrapper) {
+        if (!tooltip || !wrapper) return;
+        
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const padding = 20;
+        
+        // Temporarily make tooltip visible to measure
+        const wasVisible = tooltip.style.visibility === 'visible' || 
+                          wrapper.classList.contains('active') || 
+                          wrapper.matches(':hover');
+        
+        if (!wasVisible) {
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+            tooltip.style.display = 'block';
+        }
+        
+        // Reset all positioning
+        tooltip.classList.remove('tooltip-below');
+        tooltip.style.left = '';
+        tooltip.style.right = '';
+        tooltip.style.bottom = '';
+        tooltip.style.top = '';
+        tooltip.style.transform = '';
+        tooltip.style.marginLeft = '';
+        tooltip.style.marginRight = '';
+        
+        // Set default position (above, centered)
+        tooltip.style.bottom = '100%';
+        tooltip.style.left = '50%';
+        tooltip.style.transform = 'translateX(-50%) translateY(-10px)';
+        tooltip.style.marginBottom = '8px';
+        
+        // Get wrapper position
+        const wrapperRect = wrapper.getBoundingClientRect();
+        
+        // Calculate tooltip dimensions (approximate if not visible)
+        const tooltipWidth = tooltip.offsetWidth || 280;
+        const tooltipHeight = tooltip.offsetHeight || 100;
+        
+        // Check if tooltip would go off the top
+        const spaceAbove = wrapperRect.top;
+        const spaceBelow = viewportHeight - wrapperRect.bottom;
+        
+        if (spaceAbove < tooltipHeight + padding && spaceBelow > tooltipHeight + padding) {
+            // Position below instead
+            tooltip.classList.add('tooltip-below');
+            tooltip.style.bottom = 'auto';
+            tooltip.style.top = '100%';
+            tooltip.style.marginTop = '8px';
+            tooltip.style.marginBottom = '0';
+        }
+        
+        // Get tooltip position after setting top/bottom
+        const tooltipRect = tooltip.getBoundingClientRect();
+        
+        // Check horizontal positioning
+        const tooltipLeft = tooltipRect.left;
+        const tooltipRight = tooltipRect.right;
+        
+        if (tooltipLeft < padding) {
+            // Too far left - align to left edge with padding
+            tooltip.style.left = '0';
+            tooltip.style.transform = 'translateX(0) translateY(-10px)';
+        } else if (tooltipRight > viewportWidth - padding) {
+            // Too far right - align to right edge with padding
+            tooltip.style.left = 'auto';
+            tooltip.style.right = '0';
+            tooltip.style.transform = 'translateX(0) translateY(-10px)';
+        } else {
+            // Center is fine, but ensure it's centered
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translateX(-50%) translateY(-10px)';
+        }
+        
+        // Restore visibility if it was visible
+        if (wasVisible) {
+            tooltip.style.visibility = '';
+            tooltip.style.opacity = '';
+            // Update transform for visible state
+            const currentTransform = tooltip.style.transform;
+            if (currentTransform) {
+                tooltip.style.transform = currentTransform.replace('translateY(-10px)', 'translateY(0)');
+            }
+        } else {
+            tooltip.style.display = '';
+        }
+    }
+    
     specialtyWrappers.forEach(wrapper => {
         const specialtyTag = wrapper.querySelector('.specialty-tag');
+        const tooltip = wrapper.querySelector('.specialty-tooltip');
+        
+        if (!tooltip) return;
         
         // Click handler - toggle active state
         specialtyTag.addEventListener('click', (e) => {
@@ -1236,6 +1519,23 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Toggle clicked tooltip
             wrapper.classList.toggle('active', !isActive);
+            
+            // Adjust position after toggle
+            if (wrapper.classList.contains('active')) {
+                setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
+            }
+        });
+        
+        // Adjust position on hover
+        wrapper.addEventListener('mouseenter', () => {
+            setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
+        });
+        
+        // Adjust position on window resize
+        window.addEventListener('resize', () => {
+            if (wrapper.classList.contains('active')) {
+                adjustTooltipPosition(tooltip, wrapper);
+            }
         });
         
         // Close tooltip when clicking outside

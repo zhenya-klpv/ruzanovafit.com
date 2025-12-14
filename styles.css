@@ -654,7 +654,7 @@ a.btn.btn-hero-primary:hover::before {
 
 /* Section Styles */
 section {
-    padding: 140px 0;
+    padding: 160px 0;
     position: relative;
     margin: 0 !important;
     min-height: 100vh;
@@ -702,6 +702,65 @@ section {
     section + section {
         padding-top: 100px;
     }
+    
+    /* Hero section for tablets */
+    .hero {
+        min-height: 100vh !important;
+        padding: 140px 0 100px 0 !important;
+        display: flex !important;
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+    }
+    
+    .hero-content {
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+    
+    .hero-title,
+    .hero-subtitle,
+    .hero-subtitle-secondary,
+    .hero-buttons {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    /* About section for tablets */
+    .about {
+        min-height: auto !important;
+        padding: 140px 0 140px 0 !important;
+        padding-top: 140px !important;
+        padding-bottom: 140px !important;
+        display: flex !important;
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+    }
+    
+    .about-content {
+        opacity: 1 !important;
+        transform: none !important;
+        display: grid !important;
+        visibility: visible !important;
+    }
+    
+    .about-text,
+    .about-image,
+    .about-stats,
+    .certifications,
+    .specialties {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+    }
+    
+    .section-header {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
 }
 
 /* Fade-in animation for sections */
@@ -723,11 +782,11 @@ section + section {
 /* Add spacing between sections on desktop */
 @media (min-width: 769px) {
     section {
-        padding: 140px 0;
+        padding: 160px 0;
     }
     
     section + section {
-        padding-top: 140px;
+        padding-top: 160px;
     }
 }
 
@@ -805,8 +864,9 @@ section {
     justify-content: center;
     margin: 0 !important;
     margin-top: 0 !important;
-    padding: 120px 0;
-    padding-top: 0 !important;
+    padding: 160px 0;
+    padding-top: 160px !important;
+    padding-bottom: 160px !important;
     border-top: none !important;
     border-bottom: none !important;
     opacity: 1 !important;
@@ -929,9 +989,68 @@ section {
         grid-template-columns: 1fr;
         gap: 60px;
     }
-
+    
     .about-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .services-carousel-wrapper {
+        padding: 0 60px;
+        margin-top: 50px;
+    }
+    
+    .services-carousel {
+        overflow: hidden;
+    }
+    
+    .services-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .services-grid::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .service-card {
+        flex: 0 0 calc(100% - 40px);
+        min-width: calc(100% - 40px);
+        max-width: calc(100% - 40px);
+        scroll-snap-align: start;
+        padding: 40px 30px;
+    }
+    
+    .services-carousel-btn-prev,
+    .services-carousel-btn-next {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 16px !important;
+        z-index: 20 !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        display: flex !important;
+    }
+    
+    .services-carousel-btn-prev {
+        left: 10px;
+    }
+    
+    .services-carousel-btn-next {
+        right: 10px;
+    }
+    
+    .services-carousel-btn-prev:active,
+    .services-carousel-btn-next:active {
+        transform: translateY(-50%) scale(0.9);
     }
 }
 
@@ -952,16 +1071,48 @@ section {
     position: relative;
     z-index: 10;
     margin: 0 !important;
-    padding: 120px 0;
+    margin-top: 0 !important;
+    padding: 160px 0;
+    padding-top: 160px !important;
+    padding-bottom: 160px !important;
     overflow: hidden;
     border-top: none !important;
     border-bottom: none !important;
 }
 
+.services-carousel-wrapper {
+    position: relative;
+    margin-top: 60px;
+    padding: 0 80px;
+}
+
+.services-carousel {
+    overflow: hidden;
+    position: relative;
+}
+
+@media (min-width: 769px) {
+    .services-carousel {
+        overflow: visible;
+    }
+}
+
 .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    display: flex;
     gap: 40px;
+    transition: transform 0.5s ease-in-out;
+    align-items: stretch;
+}
+
+.services-grid.animating {
+    will-change: transform;
+}
+
+@media (min-width: 769px) {
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
 }
 
 /* Skeleton Loading Styles */
@@ -996,7 +1147,19 @@ section {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    flex: 0 0 calc(100% - 40px);
+    min-width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
+    flex-shrink: 0;
     /* Removed will-change - only add on hover */
+}
+
+@media (min-width: 769px) {
+    .service-card {
+        flex: none;
+        min-width: auto;
+        max-width: none;
+    }
 }
 
 .service-card::before {
@@ -1231,7 +1394,7 @@ section {
 /* Gallery Section */
 .gallery {
     background-color: rgba(255, 255, 255, 0.72);
-    padding: 100px 0;
+    padding: 160px 0;
     position: relative;
     z-index: 9;
     min-height: 100vh;
@@ -1392,6 +1555,7 @@ section {
 /* Testimonials Section */
 .testimonials {
     background-color: rgba(245, 245, 245, 0.70);
+    padding: 160px 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -1414,10 +1578,17 @@ section {
     position: relative;
 }
 
+@media (min-width: 1201px) {
+    .testimonials-carousel {
+        overflow: visible;
+    }
+}
+
 .testimonials-grid {
     display: flex;
     gap: 40px;
     transition: transform 0.5s ease-in-out;
+    width: 100%;
     /* Removed will-change - only needed during active animation */
 }
 
@@ -1427,6 +1598,7 @@ section {
 
 .testimonial-card {
     flex: 0 0 calc(33.333% - 27px);
+    flex-shrink: 0;
     min-width: 320px;
     max-width: 400px;
     background-color: var(--white);
@@ -1751,6 +1923,8 @@ section {
     flex-direction: column;
     overflow: hidden;
     margin: 0;
+    padding: 160px 0 180px 0;
+    padding-bottom: 180px !important;
     border-top: none;
     border-bottom: none;
 }
@@ -1846,6 +2020,11 @@ section {
     display: flex;
     flex-direction: column;
     gap: 25px;
+    margin-bottom: 0;
+}
+
+.contact-form .btn {
+    margin-top: 10px;
 }
 
 .form-group input,
@@ -1876,6 +2055,22 @@ section {
     .contact-content {
         grid-template-columns: 1fr;
         gap: 60px;
+    }
+    
+    .contact {
+        padding-bottom: 150px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact {
+        padding-bottom: 120px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .contact {
+        padding-bottom: 100px !important;
     }
 }
 
@@ -2254,16 +2449,20 @@ a:focus-visible {
 
 @media (max-width: 768px) {
     .cert-tooltip {
-        width: 240px;
+        width: calc(100vw - 40px);
+        max-width: 280px;
         font-size: 12px;
-        left: 0;
-        transform: translateX(0) translateY(-10px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        right: auto;
     }
-    .cert-item:hover .cert-tooltip {
-        transform: translateX(0) translateY(0);
+    .cert-item:hover .cert-tooltip,
+    .cert-item:hover span .cert-tooltip {
+        transform: translateX(-50%) translateY(0);
     }
     .cert-tooltip::after {
-        left: 20px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 
@@ -2317,6 +2516,7 @@ a:focus-visible {
     font-size: 13px;
     line-height: 1.5;
     width: 280px;
+    max-width: calc(100vw - 40px);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -2326,6 +2526,8 @@ a:focus-visible {
     margin-bottom: 8px;
     text-align: left;
     border: 1px solid var(--border-color);
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .specialty-tooltip::after {
@@ -2338,6 +2540,21 @@ a:focus-visible {
     border-top-color: var(--white);
 }
 
+/* Tooltip positioned below (when it would go off top) */
+.specialty-tooltip.tooltip-below {
+    bottom: auto;
+    top: 100%;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.specialty-tooltip.tooltip-below::after {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: var(--white);
+}
+
 .specialty-tag-wrapper:hover .specialty-tooltip,
 .specialty-tag-wrapper.active .specialty-tooltip {
     opacity: 1;
@@ -2347,18 +2564,30 @@ a:focus-visible {
 
 @media (max-width: 768px) {
     .specialty-tooltip {
-        width: 240px;
+        width: calc(100vw - 40px);
+        max-width: 280px;
         font-size: 12px;
-        left: 0;
-        transform: translateX(0) translateY(-10px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        right: auto;
     }
     .specialty-tag-wrapper:hover .specialty-tooltip,
     .specialty-tag-wrapper.active .specialty-tooltip {
-        transform: translateX(0) translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
     .specialty-tooltip::after {
-        left: 20px;
+        left: 50%;
+        transform: translateX(-50%);
     }
+}
+
+/* Ensure tooltip stays within viewport on all devices */
+.specialty-tooltip {
+    max-width: min(280px, calc(100vw - 40px));
+}
+
+.specialty-tag-wrapper {
+    overflow: visible;
 }
 
 /* Locations List Styles */
@@ -2399,6 +2628,7 @@ a:focus-visible {
 /* Why Choose Me Section */
 .why-choose {
     background-color: rgba(255, 255, 255, 0.72);
+    padding: 160px 0;
     position: relative;
     z-index: 9;
     min-height: 100vh;
@@ -2471,7 +2701,7 @@ a:focus-visible {
 /* Pricing Section */
 .pricing {
     background-color: rgba(245, 245, 245, 0.70);
-    padding: 120px 0 200px 0;
+    padding: 160px 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -2493,16 +2723,23 @@ a:focus-visible {
 }
 
 .pricing-carousel {
-    overflow: visible;
+    overflow: hidden;
     position: relative;
+}
+
+@media (min-width: 1201px) {
+    .pricing-carousel {
+        overflow: visible;
+    }
 }
 
 .pricing-grid {
     display: flex;
-    gap: 30px;
+    gap: 25px;
     transition: transform 0.5s ease-in-out;
     align-items: stretch;
     min-height: 600px;
+    width: 100%;
 }
 
 .pricing-grid.animating {
@@ -2510,10 +2747,11 @@ a:focus-visible {
 }
 
 .pricing-card {
-    flex: 0 0 calc(25% - 22.5px);
+    flex: 0 0 calc(25% - 18.75px);
     min-width: 0;
     max-width: none;
     width: auto;
+    flex-shrink: 0;
 }
 
 @media (max-width: 1400px) {
@@ -2524,7 +2762,10 @@ a:focus-visible {
 
 @media (max-width: 1200px) {
     .pricing-card {
-        flex: 0 0 calc(33.333% - 20px);
+        flex: 0 0 calc(33.333% - 17px);
+    }
+    .pricing-grid {
+        gap: 25px;
     }
     .pricing-carousel-wrapper {
         padding: 0 70px;
@@ -2539,7 +2780,10 @@ a:focus-visible {
 
 @media (max-width: 992px) {
     .pricing-card {
-        flex: 0 0 calc(50% - 15px);
+        flex: 0 0 calc(50% - 12.5px);
+    }
+    .pricing-grid {
+        gap: 25px;
     }
     .pricing-carousel-wrapper {
         padding: 0 60px;
@@ -2583,6 +2827,15 @@ a:focus-visible {
         min-width: calc(100% - 40px);
         max-width: calc(100% - 40px);
         scroll-snap-align: start;
+    }
+    
+    .pricing-card:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .pricing-card.featured:hover {
+        transform: none;
     }
     
     .pricing-carousel-btn-prev {
@@ -2639,6 +2892,7 @@ a:focus-visible {
     position: absolute;
     top: -15px;
     left: 50%;
+    right: auto;
     transform: translateX(-50%);
     background-color: var(--text-dark);
     color: var(--white);
@@ -2651,6 +2905,12 @@ a:focus-visible {
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border-radius: 2px;
+    text-align: center;
+    width: auto;
+    min-width: fit-content;
+    margin-left: 0;
+    margin-right: 0;
+    display: inline-block;
 }
 
 .pricing-header {
@@ -2768,9 +3028,13 @@ a:focus-visible {
     
     .popular-badge {
         top: -12px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
         padding: 8px 18px !important;
         font-size: 10px !important;
         z-index: 25 !important;
+        text-align: center !important;
     }
     
     .pricing-header {
@@ -2879,6 +3143,7 @@ a:focus-visible {
 /* FAQ Section */
 .faq {
     background-color: rgba(255, 255, 255, 0.72);
+    padding: 160px 0;
     position: relative;
     z-index: 9;
     min-height: 100vh;
@@ -2977,13 +3242,12 @@ a:focus-visible {
 /* Booking & Payment Section */
 .booking {
     background-color: rgba(245, 245, 245, 0.70);
+    padding: 160px 0;
     min-height: 100vh;
     display: flex;
     position: relative;
-    z-index: 9;
-    flex-direction: column;
-    position: relative;
     z-index: 10;
+    flex-direction: column;
 }
 
 .booking-content {
