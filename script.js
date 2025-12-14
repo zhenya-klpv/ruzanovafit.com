@@ -675,6 +675,97 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Pricing Carousel
+document.addEventListener('DOMContentLoaded', () => {
+    const pricingCarousel = document.querySelector('.pricing-grid');
+    const pricingPrevBtn = document.querySelector('.pricing-carousel-btn-prev');
+    const pricingNextBtn = document.querySelector('.pricing-carousel-btn-next');
+    
+    if (!pricingCarousel || !pricingPrevBtn || !pricingNextBtn) return;
+    
+    let currentIndex = 0;
+    const cards = pricingCarousel.querySelectorAll('.pricing-card');
+    const totalCards = cards.length;
+    
+    // Check if mobile
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+    
+    // Calculate how many cards are visible at once
+    function getVisibleCards() {
+        if (isMobile()) {
+            return 1; // On mobile, show one card at a time
+        }
+        if (window.innerWidth <= 992) {
+            return 2;
+        }
+        if (window.innerWidth <= 1200) {
+            return 3;
+        }
+        return 4;
+    }
+    
+    // Update carousel position
+    function updateCarousel() {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        currentIndex = Math.min(currentIndex, maxIndex);
+        currentIndex = Math.max(0, currentIndex);
+        
+        if (isMobile()) {
+            // On mobile, use percentage-based translation
+            const translateX = -(currentIndex * 100);
+            pricingCarousel.style.transform = `translateX(${translateX}%)`;
+        } else {
+            const cardWidth = cards[0]?.offsetWidth || 280;
+            const gap = 40;
+            const translateX = -(currentIndex * (cardWidth + gap));
+            pricingCarousel.style.transform = `translateX(${translateX}px)`;
+        }
+        
+        // Add animating class for smooth transition
+        pricingCarousel.classList.add('animating');
+        setTimeout(() => {
+            pricingCarousel.classList.remove('animating');
+        }, 500);
+        
+        // Update button states
+        pricingPrevBtn.disabled = currentIndex === 0;
+        pricingNextBtn.disabled = currentIndex >= maxIndex;
+    }
+    
+    // Next button
+    pricingNextBtn.addEventListener('click', () => {
+        const visibleCards = getVisibleCards();
+        const maxIndex = Math.max(0, totalCards - visibleCards);
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateCarousel();
+        }
+    });
+    
+    // Previous button
+    pricingPrevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+        }
+    });
+    
+    // Initialize
+    updateCarousel();
+    
+    // Update on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateCarousel();
+        }, 250);
+    });
+});
+
 // FAQ Accordion
 document.addEventListener('DOMContentLoaded', () => {
     const faqItems = document.querySelectorAll('.faq-item');

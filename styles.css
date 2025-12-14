@@ -65,22 +65,28 @@ body {
     }
 }
 
+/* Mobile First Approach - Priority for Mobile */
 @media (max-width: 768px) {
     .container {
         padding: 0 20px;
+        width: 100%;
+        max-width: 100%;
     }
     
     /* Improved mobile typography */
     h1 {
-        font-size: clamp(36px, 8vw, 48px);
+        font-size: clamp(32px, 8vw, 48px);
+        line-height: 1.2;
     }
     
     h2 {
-        font-size: clamp(28px, 6vw, 36px);
+        font-size: clamp(26px, 6vw, 36px);
+        line-height: 1.3;
     }
     
     h3 {
-        font-size: clamp(22px, 5vw, 28px);
+        font-size: clamp(20px, 5vw, 28px);
+        line-height: 1.4;
     }
     
     p {
@@ -88,32 +94,40 @@ body {
         line-height: 1.7;
     }
     
-    /* Improved mobile spacing */
+    /* Improved mobile spacing - priority */
     section {
-        padding: 80px 0;
-        min-height: auto;
-        height: auto;
+        padding: 60px 0 !important;
+        min-height: auto !important;
+        height: auto !important;
+        display: block !important;
     }
     
     /* Add proper spacing between sections on mobile */
     section + section {
-        margin-top: 0;
-        padding-top: 80px;
+        margin-top: 0 !important;
+        padding-top: 60px !important;
     }
     
     .section-header {
-        margin-bottom: 50px;
+        margin-bottom: 40px;
         margin-top: 0;
-        padding-top: 60px;
+        padding-top: 40px;
+        padding-left: 0;
+        padding-right: 0;
     }
     
     /* First section after hero should have more spacing */
     .hero + section .section-header {
-        padding-top: 60px;
+        padding-top: 40px;
     }
     
     .section-title {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+        font-size: clamp(24px, 6vw, 32px);
+    }
+    
+    .section-subtitle {
+        font-size: 13px;
     }
 }
 
@@ -667,6 +681,19 @@ section {
     background-clip: padding-box;
     /* Ensure sections are above smoke but allow smoke visibility */
     background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Cross-platform spacing fixes */
+@media (max-width: 1200px) {
+    section {
+        padding: 100px 0;
+    }
+}
+
+@media (max-width: 992px) {
+    section {
+        padding: 90px 0;
+    }
 }
 
 /* Fade-in animation for sections */
@@ -1549,13 +1576,14 @@ section {
 
 @media (max-width: 768px) {
     .testimonials {
-        padding: 80px 0;
+        padding: 60px 0 !important;
         overflow: visible;
+        min-height: auto !important;
     }
     
     .testimonials-carousel-wrapper {
-        padding: 0 60px;
-        margin-top: 50px;
+        padding: 0 50px !important;
+        margin-top: 30px !important;
         position: relative;
         overflow: visible;
     }
@@ -1565,8 +1593,8 @@ section {
     }
     
     .testimonials-grid {
-        display: flex;
-        flex-wrap: nowrap;
+        display: flex !important;
+        flex-wrap: nowrap !important;
         gap: 20px;
         overflow-x: auto;
         overflow-y: visible;
@@ -1581,44 +1609,46 @@ section {
     }
     
     .testimonial-card {
-        flex: 0 0 calc(100% - 40px);
-        min-width: calc(100% - 40px);
-        max-width: calc(100% - 40px);
-        padding: 40px 30px;
+        flex: 0 0 calc(100% - 40px) !important;
+        min-width: calc(100% - 40px) !important;
+        max-width: calc(100% - 40px) !important;
+        padding: 35px 25px !important;
         scroll-snap-align: start;
     }
     
     .testimonial-text {
-        font-size: 15px;
-        margin-bottom: 30px;
+        font-size: 14px;
+        margin-bottom: 25px;
+        line-height: 1.7;
     }
     
     .testimonial-author {
-        gap: 15px;
-        padding-top: 20px;
+        gap: 12px;
+        padding-top: 18px;
     }
     
     .author-avatar {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
     }
     
     .author-name {
-        font-size: 15px;
+        font-size: 14px;
     }
     
     .author-location {
-        font-size: 13px;
+        font-size: 12px;
     }
     
     .carousel-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 16px;
-        z-index: 20;
-        background-color: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 16px !important;
+        z-index: 20 !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        display: flex !important;
     }
     
     .carousel-btn:active {
@@ -1626,11 +1656,11 @@ section {
     }
     
     .carousel-btn-prev {
-        left: 10px;
+        left: 10px !important;
     }
     
     .carousel-btn-next {
-        right: 10px;
+        right: 10px !important;
     }
 }
 
@@ -2431,23 +2461,93 @@ a:focus-visible {
     border-bottom: none;
 }
 
-.pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px;
-    max-width: 1100px;
-    margin: 0 auto;
+.pricing-carousel-wrapper {
+    position: relative;
     margin-top: 80px;
+    padding: 0 80px;
+}
+
+.pricing-carousel {
+    overflow: hidden;
+    position: relative;
+}
+
+.pricing-grid {
+    display: flex;
+    gap: 40px;
+    transition: transform 0.5s ease-in-out;
+}
+
+.pricing-grid.animating {
+    will-change: transform;
+}
+
+.pricing-card {
+    flex: 0 0 calc(25% - 30px);
+    min-width: 280px;
+    max-width: 320px;
+}
+
+@media (max-width: 1200px) {
+    .pricing-card {
+        flex: 0 0 calc(33.333% - 27px);
+    }
+    .pricing-carousel-wrapper {
+        padding: 0 60px;
+    }
+    .pricing-carousel-btn-prev {
+        left: -40px;
+    }
+    .pricing-carousel-btn-next {
+        right: -40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pricing-card {
+        flex: 0 0 calc(50% - 20px);
+    }
 }
 
 @media (max-width: 768px) {
-    .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
+    .pricing-carousel-wrapper {
+        padding: 0 60px;
         margin-top: 50px;
-        max-width: 100%;
-        width: 100%;
-        display: grid !important;
+    }
+    
+    .pricing-carousel {
+        overflow: visible;
+    }
+    
+    .pricing-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .pricing-grid::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .pricing-card {
+        flex: 0 0 calc(100% - 40px);
+        min-width: calc(100% - 40px);
+        max-width: calc(100% - 40px);
+        scroll-snap-align: start;
+    }
+    
+    .pricing-carousel-btn-prev {
+        left: 10px;
+    }
+    
+    .pricing-carousel-btn-next {
+        right: 10px;
     }
 }
 
@@ -2468,11 +2568,22 @@ a:focus-visible {
 
 .pricing-card.featured {
     border: 2px solid var(--text-dark);
-    transform: scale(1.05);
 }
 
-.pricing-card.featured:hover {
-    transform: scale(1.05) translateY(-10px);
+@media (min-width: 1201px) {
+    .pricing-card.featured {
+        transform: scale(1.05);
+    }
+    
+    .pricing-card.featured:hover {
+        transform: scale(1.05) translateY(-10px);
+    }
+}
+
+@media (max-width: 1200px) {
+    .pricing-card.featured:hover {
+        transform: translateY(-10px);
+    }
 }
 
 .popular-badge {
@@ -2556,73 +2667,124 @@ a:focus-visible {
 
 @media (max-width: 768px) {
     .pricing {
-        padding: 80px 0;
+        padding: 60px 0 !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
+        min-height: auto !important;
+    }
+    
+    .pricing-carousel-wrapper {
+        padding: 0 50px !important;
+        margin-top: 30px !important;
     }
     
     .pricing-card {
-        padding: 40px 30px;
-        min-width: 100%;
-        width: 100%;
+        padding: 35px 25px !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-        margin-bottom: 30px;
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
     }
     
     .pricing-header {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
     }
     
     .pricing-header h3 {
-        font-size: 24px;
+        font-size: 22px;
         margin-bottom: 0;
     }
     
     .pricing-features {
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
     
     .pricing-features li {
         font-size: 14px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    
+    .pricing-carousel-btn-prev,
+    .pricing-carousel-btn-next {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 16px !important;
+        z-index: 20 !important;
+        background-color: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        display: flex !important;
+    }
+    
+    .pricing-carousel-btn-prev:active,
+    .pricing-carousel-btn-next:active {
+        transform: translateY(-50%) scale(0.9);
+    }
+    
+    .btn {
+        padding: 14px 24px;
+        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
     .pricing {
-        padding: 80px 0;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
+        padding: 50px 0 !important;
     }
     
-    .pricing-grid {
-        gap: 25px;
-        margin-top: 40px;
-        display: grid !important;
-        grid-template-columns: 1fr !important;
+    .pricing-carousel-wrapper {
+        padding: 0 45px !important;
+        margin-top: 25px !important;
     }
     
     .pricing-card {
-        padding: 35px 25px;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
+        padding: 30px 20px !important;
+        flex: 0 0 calc(100% - 10px) !important;
+        min-width: calc(100% - 10px) !important;
+        max-width: calc(100% - 10px) !important;
+    }
+    
+    .pricing-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
     }
     
     .pricing-header h3 {
-        font-size: 22px;
+        font-size: 20px;
+    }
+    
+    .pricing-features {
+        margin-bottom: 20px;
     }
     
     .pricing-features li {
         font-size: 13px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .pricing-carousel-btn-prev,
+    .pricing-carousel-btn-next {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 14px !important;
+    }
+    
+    .pricing-carousel-btn-prev {
+        left: 5px !important;
+    }
+    
+    .pricing-carousel-btn-next {
+        right: 5px !important;
+    }
+    
+    .btn {
+        padding: 12px 20px;
+        font-size: 13px;
     }
 }
 
