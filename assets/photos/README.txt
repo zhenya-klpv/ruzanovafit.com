@@ -16,3 +16,7 @@ If you want a premium look (transparent cutout over a clean background), export 
 - hero-cutout.webp (WebP with alpha, transparent background)
 
 Cutout is already supported in CSS. Upload the file and it will appear automatically.
+
+Premium portrait (About):
+- about-cutout.webp (WebP with alpha, transparent background)
+  - The site renders it as a "premium portrait" with softer edges (CSS softening + shadow).
