@@ -1368,6 +1368,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!inSpecialty && !inCert) closeAllTooltips();
     });
 
+    // iOS/Safari sometimes misses click for closing; use pointerdown/touchstart early (capture)
+    document.addEventListener('pointerdown', (e) => {
+        const inSpecialty = e.target.closest('.specialty-tag-wrapper');
+        const inCert = e.target.closest('.cert-item');
+        if (!inSpecialty && !inCert) closeAllTooltips();
+    }, { capture: true });
+    document.addEventListener('touchstart', (e) => {
+        const inSpecialty = e.target.closest('.specialty-tag-wrapper');
+        const inCert = e.target.closest('.cert-item');
+        if (!inSpecialty && !inCert) closeAllTooltips();
+    }, { passive: true, capture: true });
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAllTooltips();
     });
