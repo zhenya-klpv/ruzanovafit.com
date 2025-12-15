@@ -379,6 +379,23 @@ p {
     filter: saturate(1.10) contrast(1.18) brightness(0.82);
 }
 
+/* If a cutout exists, keep the stage photo as an abstract blurred background */
+.has-hero-cutout .hero::before {
+    opacity: 0.55;
+    filter: blur(18px) saturate(0.95) contrast(1.05) brightness(0.55);
+    transform: scale(1.10);
+}
+
+.has-hero-cutout .hero::after {
+    background-image:
+        radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0) 58%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0.10) 100%);
+}
+
+.has-hero-cutout .smoke-container {
+    opacity: 0.06;
+}
+
 .hero::after {
     content: '';
     position: absolute;
@@ -1094,7 +1111,7 @@ section {
     border-radius: 18px;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.12);
     border: 1px solid rgba(0, 0, 0, 0.08);
-    background-image: var(--about-photo);
+    background-image: radial-gradient(120% 90% at 50% 30%, rgba(245,245,245,0.95) 0%, rgba(235,235,235,0.78) 55%, rgba(245,245,245,0.92) 100%);
     background-size: cover;
     background-position: center 22%;
     background-repeat: no-repeat;
@@ -1109,7 +1126,7 @@ section {
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
     background-position: center bottom;
-    background-size: min(520px, 95%) auto;
+    background-size: min(360px, 88%) auto;
     /* Make edges feel softer + premium */
     filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16)) blur(0.6px);
     /* Subtle fade at the very edges of the overlay */

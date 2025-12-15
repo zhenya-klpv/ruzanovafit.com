@@ -1,8 +1,8 @@
 // Service Worker for caching static resources
-// Version 1.2.0
+// Version 1.3.0
 
 // Bump cache name to force clients to refresh assets after deploys
-const CACHE_NAME = 'ruzanova-fitness-v3';
+const CACHE_NAME = 'ruzanova-fitness-v4';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -17,7 +17,8 @@ const STATIC_ASSETS = [
     // New site photos (keep only files that are guaranteed to exist)
     '/assets/photos/hero-stage.jpg',
     '/assets/photos/about-medal.jpg',
-    '/assets/photos/about-cutout.webp'
+    '/assets/photos/about-cutout.webp',
+    '/assets/photos/hero-cutout.webp'
 ];
 
 // Install event - cache static assets

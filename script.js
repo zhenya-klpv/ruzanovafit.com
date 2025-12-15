@@ -35,6 +35,19 @@ if (hamburger && navMenu) {
     });
 }
 
+
+// Asset feature detection (cutouts)
+document.addEventListener('DOMContentLoaded', () => {
+    const root = document.documentElement;
+    const test = (url, cls) => {
+        const img = new Image();
+        img.onload = () => root.classList.add(cls);
+        img.src = url + '?v=' + Date.now();
+    };
+    test('/assets/photos/hero-cutout.webp', 'has-hero-cutout');
+    test('/assets/photos/about-cutout.webp', 'has-about-cutout');
+});
+
 /**
  * Optimized Scroll Handler with Throttle and Caching
  * Single scroll handler for all scroll-based updates to improve performance
