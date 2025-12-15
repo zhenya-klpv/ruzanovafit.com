@@ -1006,7 +1006,7 @@ section {
 
 @media (max-width: 768px) {
     .services-carousel-wrapper {
-        padding: 0 60px;
+        padding: 0 20px;
         margin-top: 50px;
     }
     
@@ -1031,9 +1031,9 @@ section {
     }
     
     .service-card {
-        flex: 0 0 calc(100% - 40px);
-        min-width: calc(100% - 40px);
-        max-width: calc(100% - 40px);
+        flex: 0 0 calc(100% - 20px);
+        min-width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
         scroll-snap-align: start;
         padding: 40px 30px;
     }
@@ -1050,11 +1050,11 @@ section {
     }
     
     .services-carousel-btn-prev {
-        left: 10px;
+        left: 5px;
     }
     
     .services-carousel-btn-next {
-        right: 10px;
+        right: 5px;
     }
     
     .services-carousel-btn-prev:active,
@@ -1066,6 +1066,25 @@ section {
 @media (max-width: 576px) {
     .about-stats {
         grid-template-columns: 1fr;
+    }
+    
+    .services-carousel-wrapper {
+        padding: 0 15px;
+    }
+    
+    .service-card {
+        flex: 0 0 calc(100% - 10px);
+        min-width: calc(100% - 10px);
+        max-width: calc(100% - 10px);
+        padding: 35px 25px;
+    }
+    
+    .services-carousel-btn-prev {
+        left: 2px;
+    }
+    
+    .services-carousel-btn-next {
+        right: 2px;
     }
 }
 
@@ -1156,9 +1175,9 @@ section {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    flex: 0 0 calc(100% - 40px);
-    min-width: calc(100% - 40px);
-    max-width: calc(100% - 40px);
+    flex: 0 0 calc(100% - 20px);
+    min-width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
     flex-shrink: 0;
     /* Removed will-change - only add on hover */
 }
@@ -2594,6 +2613,8 @@ a:focus-visible {
         left: 50%;
         transform: translateX(-50%) translateY(-10px);
         right: auto;
+        /* Ensure tooltip stays within viewport */
+        max-width: min(280px, calc(100vw - 40px));
     }
     .specialty-tag-wrapper:hover .specialty-tooltip,
     .specialty-tag-wrapper.active .specialty-tooltip {
@@ -2605,13 +2626,50 @@ a:focus-visible {
     }
 }
 
+/* Additional rules for larger mobile devices (iPhone Pro models) */
+@media (min-width: 390px) and (max-width: 430px) {
+    .specialty-tooltip {
+        max-width: min(280px, calc(100vw - 40px));
+        /* Ensure tooltip doesn't overflow on wider mobile screens */
+        left: 50%;
+        right: auto;
+    }
+}
+
 /* Ensure tooltip stays within viewport on all devices */
 .specialty-tooltip {
     max-width: min(280px, calc(100vw - 40px));
+    /* Prevent horizontal overflow */
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .specialty-tag-wrapper {
     overflow: visible;
+    /* Ensure wrapper doesn't clip tooltip */
+    position: relative;
+}
+
+/* Prevent tooltip overflow on all devices */
+.specialty-tooltip {
+    /* Ensure tooltip respects viewport boundaries */
+    will-change: transform;
+    /* Prevent text overflow */
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Additional safety for tooltip positioning */
+@media (max-width: 430px) {
+    .specialty-tooltip {
+        /* Ensure tooltip never exceeds viewport width */
+        max-width: calc(100vw - 40px) !important;
+        width: auto !important;
+        min-width: 0;
+        /* Better text wrapping on small screens */
+        word-break: break-word;
+    }
 }
 
 /* Locations List Styles */

@@ -1421,11 +1421,15 @@ document.addEventListener('DOMContentLoaded', () => {
                           wrapper.classList.contains('active') || 
                           wrapper.matches(':hover');
         
-        if (!wasVisible) {
-            tooltip.style.visibility = 'hidden';
-            tooltip.style.opacity = '0';
-            tooltip.style.display = 'block';
-        }
+        // Force tooltip to be visible temporarily for accurate measurements
+        const originalDisplay = tooltip.style.display;
+        const originalVisibility = tooltip.style.visibility;
+        const originalOpacity = tooltip.style.opacity;
+        
+        tooltip.style.display = 'block';
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.opacity = '0';
+        tooltip.style.pointerEvents = 'none';
         
         // Reset all positioning
         tooltip.classList.remove('tooltip-below');
@@ -1436,6 +1440,8 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.transform = '';
         tooltip.style.marginLeft = '';
         tooltip.style.marginRight = '';
+        tooltip.style.marginTop = '';
+        tooltip.style.marginBottom = '';
         
         // Set default position (above, centered)
         tooltip.style.bottom = '100%';
@@ -1443,60 +1449,110 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.transform = 'translateX(-50%) translateY(-10px)';
         tooltip.style.marginBottom = '8px';
         
+        // Force reflow to get accurate measurements
+        void tooltip.offsetWidth;
+        
         // Get wrapper position
         const wrapperRect = wrapper.getBoundingClientRect();
         
-        // Calculate tooltip dimensions (approximate if not visible)
-        const tooltipWidth = tooltip.offsetWidth || 280;
-        const tooltipHeight = tooltip.offsetHeight || 100;
+        // Get actual tooltip dimensions
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const tooltipWidth = tooltipRect.width || tooltip.offsetWidth || 280;
+        const tooltipHeight = tooltipRect.height || tooltip.offsetHeight || 100;
         
         // Check if tooltip would go off the top
         const spaceAbove = wrapperRect.top;
         const spaceBelow = viewportHeight - wrapperRect.bottom;
         
+        let positionAbove = true;
+        
         if (spaceAbove < tooltipHeight + padding && spaceBelow > tooltipHeight + padding) {
             // Position below instead
+            positionAbove = false;
             tooltip.classList.add('tooltip-below');
             tooltip.style.bottom = 'auto';
             tooltip.style.top = '100%';
             tooltip.style.marginTop = '8px';
             tooltip.style.marginBottom = '0';
+            
+            // Force reflow
+            void tooltip.offsetWidth;
         }
         
-        // Get tooltip position after setting top/bottom
-        const tooltipRect = tooltip.getBoundingClientRect();
+        // Get updated tooltip position
+        const updatedTooltipRect = tooltip.getBoundingClientRect();
         
-        // Check horizontal positioning
-        const tooltipLeft = tooltipRect.left;
-        const tooltipRight = tooltipRect.right;
+        // Check horizontal positioning with more precise calculations
+        let tooltipLeft = updatedTooltipRect.left;
+        let tooltipRight = updatedTooltipRect.right;
+        let finalLeft = '50%';
+        let finalTransform = 'translateX(-50%)';
         
-        if (tooltipLeft < padding) {
+        // Calculate center position relative to wrapper
+        const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
+        const tooltipCenterX = wrapperCenterX;
+        
+        // Check if tooltip would overflow left
+        if (tooltipCenterX - tooltipWidth / 2 < padding) {
             // Too far left - align to left edge with padding
-            tooltip.style.left = '0';
-            tooltip.style.transform = 'translateX(0) translateY(-10px)';
-        } else if (tooltipRight > viewportWidth - padding) {
+            finalLeft = padding + 'px';
+            finalTransform = 'translateX(0)';
+        } 
+        // Check if tooltip would overflow right
+        else if (tooltipCenterX + tooltipWidth / 2 > viewportWidth - padding) {
             // Too far right - align to right edge with padding
-            tooltip.style.left = 'auto';
-            tooltip.style.right = '0';
-            tooltip.style.transform = 'translateX(0) translateY(-10px)';
+            finalLeft = 'auto';
+            tooltip.style.right = padding + 'px';
+            finalTransform = 'translateX(0)';
         } else {
-            // Center is fine, but ensure it's centered
-            tooltip.style.left = '50%';
-            tooltip.style.transform = 'translateX(-50%) translateY(-10px)';
+            // Center is fine
+            finalLeft = '50%';
+            finalTransform = 'translateX(-50%)';
+        }
+        
+        // Apply horizontal positioning
+        tooltip.style.left = finalLeft;
+        if (finalLeft === 'auto') {
+            tooltip.style.right = padding + 'px';
+        } else {
+            tooltip.style.right = '';
+        }
+        
+        // Apply vertical transform
+        const verticalOffset = positionAbove ? 'translateY(-10px)' : 'translateY(10px)';
+        tooltip.style.transform = finalTransform + ' ' + verticalOffset;
+        
+        // Final check - ensure tooltip is within bounds
+        void tooltip.offsetWidth;
+        const finalRect = tooltip.getBoundingClientRect();
+        
+        if (finalRect.left < padding) {
+            tooltip.style.left = padding + 'px';
+            tooltip.style.transform = 'translateX(0) ' + verticalOffset;
+        } else if (finalRect.right > viewportWidth - padding) {
+            tooltip.style.left = 'auto';
+            tooltip.style.right = padding + 'px';
+            tooltip.style.transform = 'translateX(0) ' + verticalOffset;
         }
         
         // Restore visibility if it was visible
-        if (wasVisible) {
-            tooltip.style.visibility = '';
-            tooltip.style.opacity = '';
-            // Update transform for visible state
+        if (wasVisible || wrapper.classList.contains('active')) {
+            tooltip.style.display = 'block';
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = '1';
+            
+            // Update transform for visible state (remove offset)
             const currentTransform = tooltip.style.transform;
             if (currentTransform) {
-                tooltip.style.transform = currentTransform.replace('translateY(-10px)', 'translateY(0)');
+                tooltip.style.transform = currentTransform.replace(/translateY\([^)]+\)/g, 'translateY(0)');
             }
         } else {
-            tooltip.style.display = '';
+            tooltip.style.display = originalDisplay || '';
+            tooltip.style.visibility = originalVisibility || '';
+            tooltip.style.opacity = originalOpacity || '';
         }
+        
+        tooltip.style.pointerEvents = '';
     }
     
     specialtyWrappers.forEach(wrapper => {
@@ -1533,9 +1589,26 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Adjust position on window resize
         window.addEventListener('resize', () => {
-            if (wrapper.classList.contains('active')) {
-                adjustTooltipPosition(tooltip, wrapper);
+            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
+                setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
             }
+        });
+        
+        // Adjust position when tooltip becomes visible (for CSS transitions)
+        const observer = new MutationObserver(() => {
+            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
+                setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 50);
+            }
+        });
+        
+        observer.observe(tooltip, {
+            attributes: true,
+            attributeFilter: ['class', 'style']
+        });
+        
+        observer.observe(wrapper, {
+            attributes: true,
+            attributeFilter: ['class']
         });
         
         // Close tooltip when clicking outside
