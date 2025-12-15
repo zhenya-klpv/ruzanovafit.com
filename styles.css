@@ -2936,15 +2936,10 @@ a:focus-visible {
 }
 
 .pricing-carousel {
-    overflow: hidden;
+    overflow: visible;
     position: relative;
 }
 
-@media (min-width: 1201px) {
-    .pricing-carousel {
-        overflow: visible;
-    }
-}
 
 .pricing-grid {
     display: flex;
@@ -3906,6 +3901,42 @@ section:not(.hero) + section:not(.hero) {
   }
   .testimonials-grid::-webkit-scrollbar { display: none !important; }
   .testimonial-card {
+    flex: 0 0 calc(100% - 20px) !important;
+    min-width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+    scroll-snap-align: start !important;
+  }
+}
+
+
+/* Pricing coarse-pointer fallback (iOS landscape) */
+@media (pointer: coarse) {
+  .pricing-carousel-wrapper {
+    padding: 0 20px !important;
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+  .pricing-carousel {
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+  .pricing-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 20px !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    transition: none !important;
+    transform: none !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    max-width: 100% !important;
+    padding-right: 0 !important;
+  }
+  .pricing-grid::-webkit-scrollbar { display: none !important; }
+  .pricing-card {
     flex: 0 0 calc(100% - 20px) !important;
     min-width: calc(100% - 20px) !important;
     max-width: calc(100% - 20px) !important;

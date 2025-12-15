@@ -585,9 +585,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Pricing Carousel
-// Global standard:
-// - Desktop: grid (no JS slider)
-// - Mobile: native horizontal scroll (scroll-snap) + optional buttons that scroll the container
+// Mobile standard: use native horizontal scrolling (scroll-snap) and have buttons scroll the container.
+// This avoids iOS Safari clipping issues caused by transform-based sliders.
 document.addEventListener('DOMContentLoaded', () => {
     const pricingCarousel = document.querySelector('.pricing-grid');
     const pricingPrevBtn = document.querySelector('.pricing-carousel-btn-prev');
@@ -595,7 +594,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!pricingCarousel || !pricingPrevBtn || !pricingNextBtn) return;
 
-    const isMobile = () => window.innerWidth <= 768;
+    const isMobile = () =>
+        window.innerWidth <= 768 ||
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
 
     function applyMode() {
         if (!isMobile()) {
@@ -611,11 +612,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!applyMode()) return;
 
-    function getMaxScrollLeft() {
+    function maxScrollLeft() {
         return Math.max(0, pricingCarousel.scrollWidth - pricingCarousel.clientWidth);
     }
 
-    function getStep() {
+    function step() {
         return Math.max(1, pricingCarousel.clientWidth);
     }
 
@@ -624,22 +625,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     pricingNextBtn.addEventListener('click', () => {
-        const max = getMaxScrollLeft();
+        const max = maxScrollLeft();
         const left = pricingCarousel.scrollLeft;
         if (left >= max - 8) {
             scrollToLeft(0);
         } else {
-            pricingCarousel.scrollBy({ left: getStep(), behavior: 'smooth' });
+            pricingCarousel.scrollBy({ left: step(), behavior: 'smooth' });
         }
     });
 
     pricingPrevBtn.addEventListener('click', () => {
-        const max = getMaxScrollLeft();
+        const max = maxScrollLeft();
         const left = pricingCarousel.scrollLeft;
         if (left <= 8) {
             scrollToLeft(max);
         } else {
-            pricingCarousel.scrollBy({ left: -getStep(), behavior: 'smooth' });
+            pricingCarousel.scrollBy({ left: -step(), behavior: 'smooth' });
         }
     });
 
