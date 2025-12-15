@@ -1404,7 +1404,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Specialty Tooltips - Show on hover and toggle on click
+// Specialty Tooltips - Toggle on click only
 document.addEventListener('DOMContentLoaded', () => {
     const specialtyWrappers = document.querySelectorAll('.specialty-tag-wrapper');
     
@@ -1418,8 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Temporarily make tooltip visible to measure
         const wasVisible = tooltip.style.visibility === 'visible' || 
-                          wrapper.classList.contains('active') || 
-                          wrapper.matches(':hover');
+                          wrapper.classList.contains('active');
         
         // Force tooltip to be visible temporarily for accurate measurements
         const originalDisplay = tooltip.style.display;
@@ -1582,21 +1581,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Adjust position on hover
-        wrapper.addEventListener('mouseenter', () => {
-            setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
-        });
-        
-        // Adjust position on window resize
+        // Adjust position on window resize (only for active tooltips)
         window.addEventListener('resize', () => {
-            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
+            if (wrapper.classList.contains('active')) {
                 setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
             }
         });
         
         // Adjust position when tooltip becomes visible (for CSS transitions)
         const observer = new MutationObserver(() => {
-            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
+            if (wrapper.classList.contains('active')) {
                 setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 50);
             }
         });
@@ -1610,13 +1604,18 @@ document.addEventListener('DOMContentLoaded', () => {
             attributes: true,
             attributeFilter: ['class']
         });
-        
-        // Close tooltip when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!wrapper.contains(e.target)) {
+    });
+    
+    // Close tooltips when clicking outside (single handler for all tooltips)
+    document.addEventListener('click', (e) => {
+        // Check if click is outside any specialty wrapper
+        const clickedWrapper = e.target.closest('.specialty-tag-wrapper');
+        if (!clickedWrapper) {
+            // Close all tooltips if clicking outside
+            specialtyWrappers.forEach(wrapper => {
                 wrapper.classList.remove('active');
-            }
-        });
+            });
+        }
     });
 });
 

@@ -2781,7 +2781,6 @@ a:focus-visible {
     border-bottom-color: var(--white);
 }
 
-.specialty-tag-wrapper:hover .specialty-tooltip,
 .specialty-tag-wrapper.active .specialty-tooltip {
     opacity: 1;
     visibility: visible;
@@ -2799,7 +2798,6 @@ a:focus-visible {
         /* Ensure tooltip stays within viewport */
         max-width: min(280px, calc(100vw - 40px));
     }
-    .specialty-tag-wrapper:hover .specialty-tooltip,
     .specialty-tag-wrapper.active .specialty-tooltip {
         transform: translateX(-50%) translateY(0);
     }
