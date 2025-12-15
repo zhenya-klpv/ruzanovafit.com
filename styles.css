@@ -21,6 +21,12 @@
     --shadow-color: rgba(0, 0, 0, 0.08);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
+    /* iOS safe-area insets (for tooltips/popovers near screen edges) */
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+
     /* Site photos (drop files into /assets/photos/) */
     --hero-photo: url("assets/photos/hero-stage.jpg");
     --about-photo: url("assets/photos/about-medal.jpg");
@@ -2598,8 +2604,10 @@ a:focus-visible {
     white-space: normal;
 }
 
-.cert-item:hover {
+@media (hover: hover) and (pointer: fine) {
+    .cert-item:hover {
     color: var(--text-dark);
+    }
 }
 
 .cert-item i {
@@ -2608,8 +2616,10 @@ a:focus-visible {
     transition: var(--transition);
 }
 
-.cert-item:hover i {
+@media (hover: hover) and (pointer: fine) {
+    .cert-item:hover i {
     transform: scale(1.1);
+    }
 }
 
 .cert-tooltip {
@@ -2645,18 +2655,12 @@ a:focus-visible {
     border-top-color: var(--white);
 }
 
-.cert-item:hover .cert-tooltip,
-.cert-item span:hover .cert-tooltip {
+.cert-item.active .cert-tooltip {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
 }
 
-.cert-item:hover span .cert-tooltip {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-}
 
 @media (max-width: 768px) {
     .cert-tooltip {
@@ -2666,10 +2670,6 @@ a:focus-visible {
         left: 50%;
         transform: translateX(-50%) translateY(-10px);
         right: auto;
-    }
-    .cert-item:hover .cert-tooltip,
-    .cert-item:hover span .cert-tooltip {
-        transform: translateX(-50%) translateY(0);
     }
     .cert-tooltip::after {
         left: 50%;
@@ -2701,12 +2701,14 @@ a:focus-visible {
     cursor: pointer;
 }
 
-.specialty-tag:hover {
+@media (hover: hover) and (pointer: fine) {
+    .specialty-tag:hover {
     background-color: var(--accent-color);
     color: var(--white);
     border-color: var(--accent-color);
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(184, 134, 11, 0.3);
+    }
 }
 
 .specialty-tag-wrapper.active .specialty-tag {
@@ -2766,7 +2768,6 @@ a:focus-visible {
     border-bottom-color: var(--white);
 }
 
-.specialty-tag-wrapper:hover .specialty-tooltip,
 .specialty-tag-wrapper.active .specialty-tooltip {
     opacity: 1;
     visibility: visible;
@@ -2784,7 +2785,6 @@ a:focus-visible {
         /* Ensure tooltip stays within viewport */
         max-width: min(280px, calc(100vw - 40px));
     }
-    .specialty-tag-wrapper:hover .specialty-tooltip,
     .specialty-tag-wrapper.active .specialty-tooltip {
         transform: translateX(-50%) translateY(0);
     }

@@ -1162,33 +1162,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Specialty Tooltips - Show on hover and toggle on click
+// Specialty + Certification Tooltips - click/tap only (no hover on iOS)
 document.addEventListener('DOMContentLoaded', () => {
     const specialtyWrappers = document.querySelectorAll('.specialty-tag-wrapper');
-    
+    const certItems = document.querySelectorAll('.cert-item');
+
+    if (specialtyWrappers.length === 0 && certItems.length === 0) return;
+
     // Function to adjust tooltip position to stay within viewport
     function adjustTooltipPosition(tooltip, wrapper) {
         if (!tooltip || !wrapper) return;
-        
+
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-        const padding = 20;
-        
+        const basePad = 20;
+        const rootStyles = getComputedStyle(document.documentElement);
+        const safeLeft = parseFloat(rootStyles.getPropertyValue('--safe-left')) || 0;
+        const safeRight = parseFloat(rootStyles.getPropertyValue('--safe-right')) || 0;
+        const safeTop = parseFloat(rootStyles.getPropertyValue('--safe-top')) || 0;
+        const safeBottom = parseFloat(rootStyles.getPropertyValue('--safe-bottom')) || 0;
+        const padLeft = basePad + safeLeft;
+        const padRight = basePad + safeRight;
+        const padTop = basePad + safeTop;
+        const padBottom = basePad + safeBottom;
+
         // Temporarily make tooltip visible to measure
-        const wasVisible = tooltip.style.visibility === 'visible' || 
-                          wrapper.classList.contains('active') || 
-                          wrapper.matches(':hover');
-        
-        // Force tooltip to be visible temporarily for accurate measurements
+        const wasVisible = tooltip.style.visibility === 'visible' || wrapper.classList.contains('active');
+
         const originalDisplay = tooltip.style.display;
         const originalVisibility = tooltip.style.visibility;
         const originalOpacity = tooltip.style.opacity;
-        
+
         tooltip.style.display = 'block';
         tooltip.style.visibility = 'hidden';
         tooltip.style.opacity = '0';
         tooltip.style.pointerEvents = 'none';
-        
+
         // Reset all positioning
         tooltip.classList.remove('tooltip-below');
         tooltip.style.left = '';
@@ -1200,106 +1209,75 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.marginRight = '';
         tooltip.style.marginTop = '';
         tooltip.style.marginBottom = '';
-        
-        // Set default position (above, centered)
+
+        // Default position (above, centered)
         tooltip.style.bottom = '100%';
         tooltip.style.left = '50%';
         tooltip.style.transform = 'translateX(-50%) translateY(-10px)';
         tooltip.style.marginBottom = '8px';
-        
-        // Force reflow to get accurate measurements
+
         void tooltip.offsetWidth;
-        
-        // Get wrapper position
+
         const wrapperRect = wrapper.getBoundingClientRect();
-        
-        // Get actual tooltip dimensions
         const tooltipRect = tooltip.getBoundingClientRect();
         const tooltipWidth = tooltipRect.width || tooltip.offsetWidth || 280;
         const tooltipHeight = tooltipRect.height || tooltip.offsetHeight || 100;
-        
-        // Check if tooltip would go off the top
+
         const spaceAbove = wrapperRect.top;
         const spaceBelow = viewportHeight - wrapperRect.bottom;
-        
+
         let positionAbove = true;
-        
-        if (spaceAbove < tooltipHeight + padding && spaceBelow > tooltipHeight + padding) {
-            // Position below instead
+        if (spaceAbove < tooltipHeight + padTop && spaceBelow > tooltipHeight + padTop) {
             positionAbove = false;
             tooltip.classList.add('tooltip-below');
             tooltip.style.bottom = 'auto';
             tooltip.style.top = '100%';
             tooltip.style.marginTop = '8px';
             tooltip.style.marginBottom = '0';
-            
-            // Force reflow
             void tooltip.offsetWidth;
         }
-        
-        // Get updated tooltip position
-        const updatedTooltipRect = tooltip.getBoundingClientRect();
-        
-        // Check horizontal positioning with more precise calculations
-        let tooltipLeft = updatedTooltipRect.left;
-        let tooltipRight = updatedTooltipRect.right;
+
+        const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
+
         let finalLeft = '50%';
         let finalTransform = 'translateX(-50%)';
-        
-        // Calculate center position relative to wrapper
-        const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
-        const tooltipCenterX = wrapperCenterX;
-        
-        // Check if tooltip would overflow left
-        if (tooltipCenterX - tooltipWidth / 2 < padding) {
-            // Too far left - align to left edge with padding
-            finalLeft = padding + 'px';
+
+        if (wrapperCenterX - tooltipWidth / 2 < padLeft) {
+            finalLeft = padLeft + 'px';
             finalTransform = 'translateX(0)';
-        } 
-        // Check if tooltip would overflow right
-        else if (tooltipCenterX + tooltipWidth / 2 > viewportWidth - padding) {
-            // Too far right - align to right edge with padding
+        } else if (wrapperCenterX + tooltipWidth / 2 > viewportWidth - padRight) {
             finalLeft = 'auto';
-            tooltip.style.right = padding + 'px';
+            tooltip.style.right = padRight + 'px';
             finalTransform = 'translateX(0)';
-        } else {
-            // Center is fine
-            finalLeft = '50%';
-            finalTransform = 'translateX(-50%)';
         }
-        
-        // Apply horizontal positioning
+
         tooltip.style.left = finalLeft;
         if (finalLeft === 'auto') {
-            tooltip.style.right = padding + 'px';
+            tooltip.style.right = padRight + 'px';
         } else {
             tooltip.style.right = '';
         }
-        
-        // Apply vertical transform
+
         const verticalOffset = positionAbove ? 'translateY(-10px)' : 'translateY(10px)';
         tooltip.style.transform = finalTransform + ' ' + verticalOffset;
-        
-        // Final check - ensure tooltip is within bounds
+
         void tooltip.offsetWidth;
         const finalRect = tooltip.getBoundingClientRect();
-        
-        if (finalRect.left < padding) {
-            tooltip.style.left = padding + 'px';
+
+        if (finalRect.left < padLeft) {
+            tooltip.style.left = padLeft + 'px';
+            tooltip.style.right = '';
             tooltip.style.transform = 'translateX(0) ' + verticalOffset;
-        } else if (finalRect.right > viewportWidth - padding) {
+        } else if (finalRect.right > viewportWidth - padRight) {
             tooltip.style.left = 'auto';
-            tooltip.style.right = padding + 'px';
+            tooltip.style.right = padRight + 'px';
             tooltip.style.transform = 'translateX(0) ' + verticalOffset;
         }
-        
-        // Restore visibility if it was visible
+
         if (wasVisible || wrapper.classList.contains('active')) {
             tooltip.style.display = 'block';
             tooltip.style.visibility = 'visible';
             tooltip.style.opacity = '1';
-            
-            // Update transform for visible state (remove offset)
             const currentTransform = tooltip.style.transform;
             if (currentTransform) {
                 tooltip.style.transform = currentTransform.replace(/translateY\([^)]+\)/g, 'translateY(0)');
@@ -1309,72 +1287,92 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltip.style.visibility = originalVisibility || '';
             tooltip.style.opacity = originalOpacity || '';
         }
-        
+
         tooltip.style.pointerEvents = '';
     }
-    
+
+    function closeAllTooltips() {
+        specialtyWrappers.forEach(w => w.classList.remove('active'));
+        certItems.forEach(i => i.classList.remove('active'));
+    }
+
+    function toggleActiveItem(item, siblings, tooltipSelector) {
+        const tooltip = item.querySelector(tooltipSelector);
+        if (!tooltip) return;
+
+        const isActive = item.classList.contains('active');
+        siblings.forEach(s => {
+            if (s !== item) s.classList.remove('active');
+        });
+
+        item.classList.toggle('active', !isActive);
+
+        if (item.classList.contains('active')) {
+            setTimeout(() => adjustTooltipPosition(tooltip, item), 10);
+        }
+    }
+
     specialtyWrappers.forEach(wrapper => {
         const specialtyTag = wrapper.querySelector('.specialty-tag');
         const tooltip = wrapper.querySelector('.specialty-tooltip');
-        
-        if (!tooltip) return;
-        
-        // Click handler - toggle active state
+        if (!specialtyTag || !tooltip) return;
+
         specialtyTag.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
-            const isActive = wrapper.classList.contains('active');
-            
-            // Close all other tooltips
-            specialtyWrappers.forEach(w => {
-                if (w !== wrapper) {
-                    w.classList.remove('active');
-                }
-            });
-            
-            // Toggle clicked tooltip
-            wrapper.classList.toggle('active', !isActive);
-            
-            // Adjust position after toggle
-            if (wrapper.classList.contains('active')) {
-                setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
-            }
+            toggleActiveItem(wrapper, specialtyWrappers, '.specialty-tooltip');
         });
-        
-        // Adjust position on hover
-        wrapper.addEventListener('mouseenter', () => {
-            setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
-        });
-        
-        // Adjust position on window resize
-        window.addEventListener('resize', () => {
-            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
-                setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
-            }
-        });
-        
-        // Adjust position when tooltip becomes visible (for CSS transitions)
-        const observer = new MutationObserver(() => {
-            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
-                setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 50);
-            }
-        });
-        
-        observer.observe(tooltip, {
-            attributes: true,
-            attributeFilter: ['class', 'style']
-        });
-        
-        observer.observe(wrapper, {
-            attributes: true,
-            attributeFilter: ['class']
-        });
-        
-        // Close tooltip when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!wrapper.contains(e.target)) {
-                wrapper.classList.remove('active');
+
+        specialtyTag.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                specialtyTag.click();
             }
         });
     });
-});
 
+    certItems.forEach(item => {
+        const tooltip = item.querySelector('.cert-tooltip');
+        if (!tooltip) return;
+
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleActiveItem(item, certItems, '.cert-tooltip');
+        });
+
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                item.click();
+            }
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        specialtyWrappers.forEach(w => {
+            if (!w.classList.contains('active')) return;
+            const t = w.querySelector('.specialty-tooltip');
+            if (t) setTimeout(() => adjustTooltipPosition(t, w), 10);
+        });
+        certItems.forEach(i => {
+            if (!i.classList.contains('active')) return;
+            const t = i.querySelector('.cert-tooltip');
+            if (t) setTimeout(() => adjustTooltipPosition(t, i), 10);
+        });
+    }, { passive: true });
+
+    document.addEventListener('click', (e) => {
+        const inSpecialty = e.target.closest('.specialty-tag-wrapper');
+        const inCert = e.target.closest('.cert-item');
+        if (!inSpecialty && !inCert) closeAllTooltips();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAllTooltips();
+    });
+
+    window.addEventListener('scroll', () => {
+        closeAllTooltips();
+    }, { passive: true });
+});
