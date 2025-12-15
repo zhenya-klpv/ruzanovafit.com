@@ -20,6 +20,31 @@
     --border-color: #e5e5e5;
     --shadow-color: rgba(0, 0, 0, 0.08);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Design tokens (global standards) */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+
+    /* Spacing scale */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 96px;
+
+    /* Layout */
+    --container-max: 1200px;
+    --container-wide: 1400px;
+    --container-pad: clamp(16px, 4vw, 40px);
+
+    /* Section rhythm */
+    --section-pad-y: clamp(72px, 9vh, 140px);
+    --section-pad-y-mobile: clamp(56px, 8vh, 96px);
 }
 
 html {
@@ -54,22 +79,9 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: var(--container-wide);
     margin: 0 auto;
-    padding: 0 40px;
-}
-
-/* Extended breakpoints for smooth adaptation */
-@media (max-width: 1600px) {
-    .container {
-        padding: 0 38px;
-    }
-}
-
-@media (max-width: 1400px) {
-    .container {
-        padding: 0 35px;
-    }
+    padding: 0 var(--container-pad);
 }
 
 @media (max-width: 1200px) {
@@ -78,52 +90,10 @@ body {
     }
 }
 
-@media (max-width: 1024px) {
-    .container {
-        padding: 0 25px;
-    }
-}
-
-@media (max-width: 900px) {
-    .container {
-        padding: 0 22px;
-    }
-}
-
-@media (max-width: 800px) {
-    .container {
-        padding: 0 20px;
-    }
-}
-
-@media (max-width: 700px) {
-    .container {
-        padding: 0 18px;
-    }
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 0 16px;
-    }
-}
-
-@media (max-width: 500px) {
-    .container {
-        padding: 0 15px;
-    }
-}
-
-@media (max-width: 400px) {
-    .container {
-        padding: 0 12px;
-    }
-}
-
 /* Mobile First Approach - Priority for Mobile */
 @media (max-width: 768px) {
     .container {
-        padding: 0 20px;
+        padding: 0 var(--container-pad);
         width: 100%;
         max-width: 100%;
     }
@@ -150,12 +120,11 @@ body {
     }
     
     /* Improved mobile spacing - unified and proportional */
-    /* All sections except hero have unified top padding */
+    /* Avoid 100vh/100dvh on iOS (causes different spacing across devices). */
     section:not(.hero) {
-        padding-top: 60px !important;
-        padding-bottom: 80px !important;
-        min-height: 100vh !important;
-        min-height: 100dvh !important; /* Dynamic viewport height for mobile */
+        padding-top: var(--section-pad-y-mobile) !important;
+        padding-bottom: calc(var(--section-pad-y-mobile) + 8px) !important;
+        min-height: auto !important;
         display: flex !important;
         flex-direction: column !important;
         height: auto !important;
@@ -164,12 +133,12 @@ body {
     /* Add proper spacing between sections on mobile */
     section:not(.hero) + section:not(.hero) {
         margin-top: 0 !important;
-        padding-top: 60px !important;
+        padding-top: var(--section-pad-y-mobile) !important;
     }
     
     /* First section after hero */
     .hero + section:not(.hero) {
-        padding-top: 60px !important;
+        padding-top: var(--section-pad-y-mobile) !important;
     }
     
     .section-header {
@@ -718,16 +687,17 @@ a.btn.btn-hero-primary:hover::before {
 
 /* Section Styles */
 section {
-    padding: 160px 0;
+    padding: var(--section-pad-y) 0;
     position: relative;
     margin: 0 !important;
-    min-height: 100vh;
+    min-height: auto;
     height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    opacity: 0;
-    transform: translateY(30px);
+    /* Default: keep content visible (no-JS safe). JS will enable reveal. */
+    opacity: 1;
+    transform: none;
     transition: opacity 0.6s ease-out, transform 0.3s ease-out;
     overflow: hidden;
     border-top: none !important;
@@ -745,6 +715,49 @@ section {
     background-clip: padding-box;
     /* Ensure sections are above smoke but allow smoke visibility */
     background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Reveal system (JS-enhanced only) */
+.js section {
+    opacity: 0 !important;
+    transform: translateY(18px) !important;
+}
+
+.js section.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Component reveal (cards, headers, etc.) */
+.js .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s ease-out, transform 0.35s ease-out;
+    will-change: transform, opacity;
+}
+
+.js .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    .js section,
+    .js section.visible {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    .js .reveal,
+    .js .reveal.visible {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
 }
 
 /* Cross-platform spacing fixes */
@@ -851,6 +864,53 @@ section + section {
     
     section + section {
         padding-top: 160px;
+    }
+}
+
+/* Desktop standards: replace carousels with clean grids (best-practice layout) */
+@media (min-width: 769px) {
+    .pricing-carousel-btn-prev,
+    .pricing-carousel-btn-next,
+    .carousel-btn-prev,
+    .carousel-btn-next,
+    .services-carousel-btn-prev,
+    .services-carousel-btn-next {
+        display: none !important;
+    }
+
+    .pricing-carousel,
+    .testimonials-carousel,
+    .services-carousel {
+        overflow: visible !important;
+    }
+
+    .pricing-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 24px !important;
+        transform: none !important;
+        transition: none !important;
+        overflow: visible !important;
+    }
+
+    .pricing-card {
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+    }
+
+    .testimonials-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 32px !important;
+        transform: none !important;
+        transition: none !important;
+        overflow: visible !important;
+    }
+
+    .testimonial-card {
+        max-width: none !important;
+        min-width: 0 !important;
     }
 }
 
@@ -1167,73 +1227,17 @@ section {
     position: relative;
     margin-top: 60px;
     padding: 0 80px;
-    overflow: visible;
-}
-
-/* Extended breakpoints for services */
-@media (max-width: 1600px) {
-    .services-carousel-wrapper {
-        padding: 0 70px;
-    }
-}
-
-@media (max-width: 1400px) {
-    .services-carousel-wrapper {
-        padding: 0 60px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .services-carousel-wrapper {
-        padding: 0 50px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .services-carousel-wrapper {
-        padding: 0 45px;
-    }
-}
-
-@media (max-width: 900px) {
-    .services-carousel-wrapper {
-        padding: 0 40px;
-    }
-}
-
-@media (max-width: 800px) {
-    .services-carousel-wrapper {
-        padding: 0 35px;
-    }
-}
-
-@media (max-width: 700px) {
-    .services-carousel-wrapper {
-        padding: 0 30px;
-    }
-}
-
-@media (max-width: 600px) {
-    .services-carousel-wrapper {
-        padding: 0 25px;
-    }
-}
-
-@media (max-width: 500px) {
-    .services-carousel-wrapper {
-        padding: 0 20px;
-    }
-}
-
-@media (max-width: 400px) {
-    .services-carousel-wrapper {
-        padding: 0 15px;
-    }
 }
 
 .services-carousel {
-    overflow: visible;
+    overflow: hidden;
     position: relative;
+}
+
+@media (min-width: 769px) {
+    .services-carousel {
+        overflow: visible;
+    }
 }
 
 .services-grid {
@@ -1241,7 +1245,6 @@ section {
     gap: 40px;
     transition: transform 0.5s ease-in-out;
     align-items: stretch;
-    overflow: visible;
 }
 
 .services-grid.animating {
@@ -1707,7 +1710,7 @@ section {
     flex-direction: column;
     position: relative;
     z-index: 10;
-    overflow: visible;
+    overflow: hidden;
     margin: 0;
     border-top: none;
     border-bottom: none;
@@ -1717,73 +1720,17 @@ section {
     position: relative;
     margin-top: 60px;
     padding: 0 80px;
-    overflow: visible;
-}
-
-/* Extended breakpoints for testimonials */
-@media (max-width: 1600px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 70px;
-    }
-}
-
-@media (max-width: 1400px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 60px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 50px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 45px;
-    }
-}
-
-@media (max-width: 900px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 40px;
-    }
-}
-
-@media (max-width: 800px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 35px;
-    }
-}
-
-@media (max-width: 700px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 30px;
-    }
-}
-
-@media (max-width: 600px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 25px;
-    }
-}
-
-@media (max-width: 500px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 20px;
-    }
-}
-
-@media (max-width: 400px) {
-    .testimonials-carousel-wrapper {
-        padding: 0 15px;
-    }
 }
 
 .testimonials-carousel {
-    overflow: visible;
+    overflow: hidden;
     position: relative;
+}
+
+@media (min-width: 1201px) {
+    .testimonials-carousel {
+        overflow: visible;
+    }
 }
 
 .testimonials-grid {
@@ -1791,7 +1738,6 @@ section {
     gap: 40px;
     transition: transform 0.5s ease-in-out;
     width: 100%;
-    overflow: visible;
     /* Removed will-change - only needed during active animation */
 }
 
@@ -2006,12 +1952,11 @@ section {
     }
     
     .testimonial-card {
-        flex: 0 0 calc(100% - 20px) !important;
-        min-width: calc(100% - 20px) !important;
-        max-width: calc(100% - 20px) !important;
+        flex: 0 0 calc(100% - 40px) !important;
+        min-width: calc(100% - 40px) !important;
+        max-width: calc(100% - 40px) !important;
         padding: 35px 25px !important;
-        scroll-snap-align: start !important;
-        overflow: visible !important;
+        scroll-snap-align: start;
     }
     
     .testimonial-text {
@@ -2071,28 +2016,15 @@ section {
     }
     
     .testimonials-carousel-wrapper {
-        padding: 0 15px !important;
-        margin-top: 40px !important;
-        overflow: visible !important;
-        max-width: 100% !important;
-    }
-    
-    .testimonials-carousel {
-        overflow: visible !important;
-        max-width: 100% !important;
-    }
-    
-    .testimonials-grid {
-        overflow: visible !important;
-        padding-right: 0 !important;
+        padding: 0 50px;
+        margin-top: 40px;
     }
     
     .testimonial-card {
-        padding: 30px 20px !important;
-        flex: 0 0 calc(100% - 10px) !important;
-        min-width: calc(100% - 10px) !important;
-        max-width: calc(100% - 10px) !important;
-        overflow: visible !important;
+        padding: 35px 25px;
+        flex: 0 0 calc(100% - 20px);
+        min-width: calc(100% - 20px);
+        max-width: calc(100% - 20px);
     }
     
     .testimonial-text {
@@ -2781,6 +2713,7 @@ a:focus-visible {
     border-bottom-color: var(--white);
 }
 
+.specialty-tag-wrapper:hover .specialty-tooltip,
 .specialty-tag-wrapper.active .specialty-tooltip {
     opacity: 1;
     visibility: visible;
@@ -2798,6 +2731,7 @@ a:focus-visible {
         /* Ensure tooltip stays within viewport */
         max-width: min(280px, calc(100vw - 40px));
     }
+    .specialty-tag-wrapper:hover .specialty-tooltip,
     .specialty-tag-wrapper.active .specialty-tooltip {
         transform: translateX(-50%) translateY(0);
     }
@@ -2999,72 +2933,10 @@ a:focus-visible {
     max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
-    overflow: visible;
-}
-
-/* Extended breakpoints for pricing */
-@media (max-width: 1600px) {
-    .pricing-carousel-wrapper {
-        padding: 0 90px;
-    }
-}
-
-@media (max-width: 1400px) {
-    .pricing-carousel-wrapper {
-        padding: 0 80px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .pricing-carousel-wrapper {
-        padding: 0 70px;
-    }
-}
-
-@media (max-width: 1024px) {
-    .pricing-carousel-wrapper {
-        padding: 0 60px;
-    }
-}
-
-@media (max-width: 900px) {
-    .pricing-carousel-wrapper {
-        padding: 0 50px;
-    }
-}
-
-@media (max-width: 800px) {
-    .pricing-carousel-wrapper {
-        padding: 0 40px;
-    }
-}
-
-@media (max-width: 700px) {
-    .pricing-carousel-wrapper {
-        padding: 0 35px;
-    }
-}
-
-@media (max-width: 600px) {
-    .pricing-carousel-wrapper {
-        padding: 0 30px;
-    }
-}
-
-@media (max-width: 500px) {
-    .pricing-carousel-wrapper {
-        padding: 0 25px;
-    }
-}
-
-@media (max-width: 400px) {
-    .pricing-carousel-wrapper {
-        padding: 0 20px;
-    }
 }
 
 .pricing-carousel {
-    overflow: visible;
+    overflow: hidden;
     position: relative;
 }
 
@@ -3081,8 +2953,6 @@ a:focus-visible {
     align-items: stretch;
     min-height: 600px;
     width: 100%;
-    overflow: visible;
-    padding-top: 20px;
 }
 
 .pricing-grid.animating {
@@ -3954,4 +3824,52 @@ footer {
     html {
         scroll-behavior: smooth;
     }
+}
+
+
+/* === GLOBAL STANDARDS (do not override) === */
+/* These rules are placed at the end of the file to win the cascade and keep
+   spacing/typography consistent across devices (incl. iPhone 17 / 17 Pro). */
+
+section:not(.hero) {
+  min-height: auto !important;
+  padding-top: var(--section-pad-y) !important;
+  padding-bottom: var(--section-pad-y) !important;
+}
+
+section:not(.hero) + section:not(.hero) {
+  padding-top: var(--section-pad-y) !important;
+}
+
+@media (max-width: 768px) {
+  section:not(.hero) {
+    min-height: auto !important;
+    padding-top: var(--section-pad-y-mobile) !important;
+    padding-bottom: calc(var(--section-pad-y-mobile) + 8px) !important;
+  }
+
+  section:not(.hero) + section:not(.hero) {
+    padding-top: var(--section-pad-y-mobile) !important;
+  }
+}
+
+/* Hover interactions only on devices that actually support hover */
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover {
+    transform: none;
+  }
+
+  /* Disable hover lifts on touch devices to avoid stuck hover states */
+  .service-card:hover,
+  .pricing-card:hover,
+  .testimonial-card:hover,
+  .why-item:hover {
+    transform: none !important;
+  }
 }

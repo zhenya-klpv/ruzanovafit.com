@@ -1,4 +1,10 @@
 /**
+ * Global flags
+ * - Adds `.js` class to enable JS-enhanced styling without breaking no-JS rendering.
+ */
+document.documentElement.classList.add('js');
+
+/**
  * Mobile Menu Toggle
  * Handles hamburger menu functionality for mobile navigation
  */
@@ -90,85 +96,10 @@ function updateNavbar(scrollY) {
 
 scrollHandlers.push(updateNavbar);
 
-// Prevent gaps between sections during fast scroll - aggressive fix
-let lastSectionPositions = null;
-
-function preventSectionGaps(scrollY) {
-    const sections = document.querySelectorAll('section');
-    if (sections.length === 0) return;
-    
-    // Cache section positions to avoid recalculations
-    if (!lastSectionPositions || scrollY % 10 === 0) {
-        lastSectionPositions = Array.from(sections).map(section => ({
-            element: section,
-            top: section.offsetTop,
-            height: section.offsetHeight,
-            bottom: section.offsetTop + section.offsetHeight
-        }));
-    }
-    
-    sections.forEach((section, index) => {
-        if (index === 0) {
-            // First section - ensure it's at the top
-            section.style.marginTop = '0';
-            section.style.top = '0';
-            section.style.transform = 'translate3d(0, 0, 0)'; // Force GPU rendering
-            return;
-        }
-        
-        const prevSection = sections[index - 1];
-        if (!prevSection) return;
-        
-        // Get cached positions or calculate fresh
-        const prevPos = lastSectionPositions[index - 1];
-        const currentPos = lastSectionPositions[index];
-        
-        if (!prevPos || !currentPos) return;
-        
-        // Calculate expected and actual positions
-        const expectedTop = prevPos.bottom;
-        const actualTop = currentPos.top;
-        const gap = actualTop - expectedTop;
-        
-        // Force immediate correction if there's any gap
-        if (Math.abs(gap) > 0.5) {
-            // Use transform for smoother, GPU-accelerated positioning
-            const correction = expectedTop - actualTop;
-            section.style.transform = `translate3d(0, ${correction}px, 0)`;
-            section.style.marginTop = '0';
-            section.style.top = '0';
-            
-            // Update cached position
-            lastSectionPositions[index].top = expectedTop;
-            lastSectionPositions[index].bottom = expectedTop + currentPos.height;
-        } else {
-            // Reset transform if no gap
-            section.style.transform = 'translate3d(0, 0, 0)';
-            section.style.marginTop = '0';
-            section.style.top = '0';
-        }
-        
-        // Ensure background is solid and extends beyond bounds
-        const bgColor = window.getComputedStyle(section).backgroundColor;
-        if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
-            section.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-        }
-        
-        // Force repaint to prevent visual glitches
-        section.style.willChange = 'transform';
-    });
-}
-
-// Reset cache on resize
-let sectionGapsResizeTimeout;
-window.addEventListener('resize', () => {
-    clearTimeout(sectionGapsResizeTimeout);
-    sectionGapsResizeTimeout = setTimeout(() => {
-        lastSectionPositions = null;
-    }, 100);
-}, { passive: true });
-
-scrollHandlers.push(preventSectionGaps);
+// NOTE: Removed `preventSectionGaps` scroll hack.
+// It was forcing `transform` on sections on every scroll, which causes inconsistent
+// spacing/rendering across iOS devices (e.g., iPhone 17 vs 17 Pro) and can break
+// layout, scroll-linked animations, and carousels. We rely on CSS layout instead.
 
 
 // Single optimized scroll event listener
@@ -183,8 +114,7 @@ window.addEventListener('resize', () => {
     resizeTimeout = setTimeout(() => {
         cachedWindowHeight = window.innerHeight;
         cachedDocumentHeight = document.documentElement.scrollHeight;
-        sectionPositions = null; // Invalidate section cache
-        scrollButtonThreshold = 0; // Reset threshold
+        cachedSections = null; // Invalidate section cache
     }, 150);
 }, { passive: true });
 
@@ -588,371 +518,195 @@ if (!window.IntersectionObserver) {
 }
 
 // Testimonials Carousel
+// Global standard:
+// - Desktop: grid (no JS slider)
+// - Mobile: native horizontal scroll (scroll-snap) + optional buttons that scroll the container
 document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.testimonials-grid');
     const prevBtn = document.querySelector('.carousel-btn-prev');
     const nextBtn = document.querySelector('.carousel-btn-next');
-    
+
     if (!carousel || !prevBtn || !nextBtn) return;
-    
-    let currentIndex = 0;
-    const cards = carousel.querySelectorAll('.testimonial-card');
-    const totalCards = cards.length;
-    
-    // Check if mobile
-    function isMobile() {
-        return window.innerWidth <= 768;
-    }
-    
-    // Calculate how many cards are visible at once
-    function getVisibleCards() {
-        if (isMobile()) {
-            return 1; // On mobile, show one card at a time
-        }
-        const cardWidth = cards[0]?.offsetWidth || 320;
-        const gap = 40;
-        const containerWidth = carousel.parentElement.offsetWidth;
-        return Math.floor(containerWidth / (cardWidth + gap));
-    }
-    
-    // Update carousel position
-    function updateCarousel() {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        
-        // If all cards fit, don't use carousel
-        if (totalCards <= visibleCards) {
-            carousel.style.transform = 'translateX(0)';
+
+    const isMobile = () => window.innerWidth <= 768;
+
+    function applyMode() {
+        if (!isMobile()) {
             prevBtn.style.display = 'none';
             nextBtn.style.display = 'none';
-            return;
-        } else {
-            prevBtn.style.display = 'flex';
-            nextBtn.style.display = 'flex';
+            carousel.style.transform = '';
+            return false;
         }
-        
-        // Infinite loop: wrap around if out of bounds
-        if (currentIndex < 0) {
-            currentIndex = maxIndex;
-        } else if (currentIndex > maxIndex) {
-            currentIndex = 0;
-        }
-        
-        if (isMobile()) {
-            // On mobile, use percentage-based translation
-            const translateX = -(currentIndex * 100);
-            carousel.style.transform = `translateX(${translateX}%)`;
-        } else {
-            // Calculate actual card width including gap
-            // Wait for cards to be rendered
-            if (cards.length > 0 && cards[0].offsetWidth > 0) {
-                const gap = 40; // Match CSS gap
-                const cardWidth = cards[0].offsetWidth;
-                const translateX = -(currentIndex * (cardWidth + gap));
-                carousel.style.transform = `translateX(${translateX}px)`;
-            } else {
-                // Fallback: use percentage if cards not yet rendered
-                const translateX = -(currentIndex * (100 / visibleCards));
-                carousel.style.transform = `translateX(${translateX}%)`;
-            }
-        }
-        
-        // Add animating class for smooth transition
-        carousel.classList.add('animating');
-        setTimeout(() => {
-            carousel.classList.remove('animating');
-        }, 500);
-        
-        // Infinite carousel - buttons are always enabled
-        prevBtn.disabled = false;
-        nextBtn.disabled = false;
+        prevBtn.style.display = 'flex';
+        nextBtn.style.display = 'flex';
+        return true;
     }
-    
-    // Next button - infinite loop
+
+    if (!applyMode()) return;
+
+    function getMaxScrollLeft() {
+        return Math.max(0, carousel.scrollWidth - carousel.clientWidth);
+    }
+
+    function getStep() {
+        return Math.max(1, carousel.clientWidth);
+    }
+
+    function scrollToLeft(left) {
+        carousel.scrollTo({ left, behavior: 'smooth' });
+    }
+
     nextBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (totalCards > visibleCards) {
-            currentIndex++;
-            if (currentIndex > maxIndex) {
-                currentIndex = 0; // Loop to start
-            }
-            updateCarousel();
+        const max = getMaxScrollLeft();
+        const left = carousel.scrollLeft;
+        if (left >= max - 8) {
+            scrollToLeft(0);
+        } else {
+            carousel.scrollBy({ left: getStep(), behavior: 'smooth' });
         }
     });
-    
-    // Previous button - infinite loop
+
     prevBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (totalCards > visibleCards) {
-            currentIndex--;
-            if (currentIndex < 0) {
-                currentIndex = maxIndex; // Loop to end
-            }
-            updateCarousel();
+        const max = getMaxScrollLeft();
+        const left = carousel.scrollLeft;
+        if (left <= 8) {
+            scrollToLeft(max);
+        } else {
+            carousel.scrollBy({ left: -getStep(), behavior: 'smooth' });
         }
     });
-    
-    // Initialize after a short delay to ensure cards are rendered
-    setTimeout(() => {
-        updateCarousel();
-    }, 100);
-    
-    // Update on window resize
-    let resizeTimeout;
+
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            updateCarousel();
-        }, 250);
-    });
-    
-    // Also update when images/content loads
-    window.addEventListener('load', () => {
-        updateCarousel();
-    });
+        applyMode();
+    }, { passive: true });
 });
 
 // Pricing Carousel
+// Global standard:
+// - Desktop: grid (no JS slider)
+// - Mobile: native horizontal scroll (scroll-snap) + optional buttons that scroll the container
 document.addEventListener('DOMContentLoaded', () => {
     const pricingCarousel = document.querySelector('.pricing-grid');
     const pricingPrevBtn = document.querySelector('.pricing-carousel-btn-prev');
     const pricingNextBtn = document.querySelector('.pricing-carousel-btn-next');
-    
+
     if (!pricingCarousel || !pricingPrevBtn || !pricingNextBtn) return;
-    
-    let currentIndex = 0;
-    const cards = pricingCarousel.querySelectorAll('.pricing-card');
-    const totalCards = cards.length;
-    
-    // Check if mobile
-    function isMobile() {
-        return window.innerWidth <= 768;
-    }
-    
-    // Calculate how many cards are visible at once
-    function getVisibleCards() {
-        if (isMobile()) {
-            return 1; // On mobile, show one card at a time
-        }
-        if (window.innerWidth <= 992) {
-            return 2;
-        }
-        if (window.innerWidth <= 1200) {
-            return 3;
-        }
-        return 4;
-    }
-    
-    // Update carousel position
-    function updateCarousel() {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        
-        // If all cards fit, don't use carousel
-        if (totalCards <= visibleCards) {
-            pricingCarousel.style.transform = 'translateX(0)';
+
+    const isMobile = () => window.innerWidth <= 768;
+
+    function applyMode() {
+        if (!isMobile()) {
             pricingPrevBtn.style.display = 'none';
             pricingNextBtn.style.display = 'none';
-            return;
-        } else {
-            pricingPrevBtn.style.display = 'flex';
-            pricingNextBtn.style.display = 'flex';
+            pricingCarousel.style.transform = '';
+            return false;
         }
-        
-        // Infinite loop: wrap around if out of bounds
-        if (currentIndex < 0) {
-            currentIndex = maxIndex;
-        } else if (currentIndex > maxIndex) {
-            currentIndex = 0;
-        }
-        
-        if (isMobile()) {
-            // On mobile, use percentage-based translation
-            const translateX = -(currentIndex * 100);
-            pricingCarousel.style.transform = `translateX(${translateX}%)`;
-        } else {
-            // Calculate actual card width including gap
-            // Wait for cards to be rendered
-            if (cards.length > 0 && cards[0].offsetWidth > 0) {
-                const gap = 25; // Match CSS gap
-                const cardWidth = cards[0].offsetWidth;
-                const translateX = -(currentIndex * (cardWidth + gap));
-                pricingCarousel.style.transform = `translateX(${translateX}px)`;
-            } else {
-                // Fallback: use percentage if cards not yet rendered
-                const translateX = -(currentIndex * (100 / visibleCards));
-                pricingCarousel.style.transform = `translateX(${translateX}%)`;
-            }
-        }
-        
-        // Add animating class for smooth transition
-        pricingCarousel.classList.add('animating');
-        setTimeout(() => {
-            pricingCarousel.classList.remove('animating');
-        }, 500);
-        
-        // Infinite carousel - buttons are always enabled
-        pricingPrevBtn.disabled = false;
-        pricingNextBtn.disabled = false;
+        pricingPrevBtn.style.display = 'flex';
+        pricingNextBtn.style.display = 'flex';
+        return true;
     }
-    
-    // Next button - infinite loop
+
+    if (!applyMode()) return;
+
+    function getMaxScrollLeft() {
+        return Math.max(0, pricingCarousel.scrollWidth - pricingCarousel.clientWidth);
+    }
+
+    function getStep() {
+        return Math.max(1, pricingCarousel.clientWidth);
+    }
+
+    function scrollToLeft(left) {
+        pricingCarousel.scrollTo({ left, behavior: 'smooth' });
+    }
+
     pricingNextBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (totalCards > visibleCards) {
-            currentIndex++;
-            if (currentIndex > maxIndex) {
-                currentIndex = 0; // Loop to start
-            }
-            updateCarousel();
+        const max = getMaxScrollLeft();
+        const left = pricingCarousel.scrollLeft;
+        if (left >= max - 8) {
+            scrollToLeft(0);
+        } else {
+            pricingCarousel.scrollBy({ left: getStep(), behavior: 'smooth' });
         }
     });
-    
-    // Previous button - infinite loop
+
     pricingPrevBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (totalCards > visibleCards) {
-            currentIndex--;
-            if (currentIndex < 0) {
-                currentIndex = maxIndex; // Loop to end
-            }
-            updateCarousel();
+        const max = getMaxScrollLeft();
+        const left = pricingCarousel.scrollLeft;
+        if (left <= 8) {
+            scrollToLeft(max);
+        } else {
+            pricingCarousel.scrollBy({ left: -getStep(), behavior: 'smooth' });
         }
     });
-    
-    // Initialize after a short delay to ensure cards are rendered
-    setTimeout(() => {
-        updateCarousel();
-    }, 100);
-    
-    // Update on window resize
-    let resizeTimeout;
+
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            updateCarousel();
-        }, 250);
-    });
-    
-    // Also update when images/content loads
-    window.addEventListener('load', () => {
-        updateCarousel();
-    });
+        applyMode();
+    }, { passive: true });
 });
 
 // Services Carousel
+// Global standard:
+// - Desktop: grid (no JS slider)
+// - Mobile: native horizontal scroll (scroll-snap) + optional buttons that scroll the container
 document.addEventListener('DOMContentLoaded', () => {
     const servicesCarousel = document.querySelector('.services-grid');
     const servicesPrevBtn = document.querySelector('.services-carousel-btn-prev');
     const servicesNextBtn = document.querySelector('.services-carousel-btn-next');
-    
+
     if (!servicesCarousel || !servicesPrevBtn || !servicesNextBtn) return;
-    
-    let currentIndex = 0;
-    const cards = servicesCarousel.querySelectorAll('.service-card');
-    const totalCards = cards.length;
-    
-    // Check if mobile
-    function isMobile() {
-        return window.innerWidth <= 768;
-    }
-    
-    // Calculate how many cards are visible at once
-    function getVisibleCards() {
-        if (isMobile()) {
-            return 1; // On mobile, show one card at a time
-        }
-        return totalCards; // On desktop, show all cards
-    }
-    
-    // Update carousel position
-    function updateCarousel() {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        
-        // If all cards fit, don't use carousel
-        if (totalCards <= visibleCards || !isMobile()) {
-            servicesCarousel.style.transform = 'translateX(0)';
+
+    const isMobile = () => window.innerWidth <= 768;
+
+    function applyMode() {
+        if (!isMobile()) {
             servicesPrevBtn.style.display = 'none';
             servicesNextBtn.style.display = 'none';
-            return;
-        } else {
-            servicesPrevBtn.style.display = 'flex';
-            servicesNextBtn.style.display = 'flex';
+            servicesCarousel.style.transform = '';
+            return false;
         }
-        
-        // Infinite loop: wrap around if out of bounds
-        if (currentIndex < 0) {
-            currentIndex = maxIndex;
-        } else if (currentIndex > maxIndex) {
-            currentIndex = 0;
-        }
-        
-        if (isMobile()) {
-            // On mobile, use percentage-based translation
-            const translateX = -(currentIndex * 100);
-            servicesCarousel.style.transform = `translateX(${translateX}%)`;
-        }
-        
-        // Add animating class for smooth transition
-        servicesCarousel.classList.add('animating');
-        setTimeout(() => {
-            servicesCarousel.classList.remove('animating');
-        }, 500);
-        
-        // Infinite carousel - buttons are always enabled
-        servicesPrevBtn.disabled = false;
-        servicesNextBtn.disabled = false;
+        servicesPrevBtn.style.display = 'flex';
+        servicesNextBtn.style.display = 'flex';
+        return true;
     }
-    
-    // Next button - infinite loop
+
+    if (!applyMode()) return;
+
+    function getMaxScrollLeft() {
+        return Math.max(0, servicesCarousel.scrollWidth - servicesCarousel.clientWidth);
+    }
+
+    function getStep() {
+        return Math.max(1, servicesCarousel.clientWidth);
+    }
+
+    function scrollToLeft(left) {
+        servicesCarousel.scrollTo({ left, behavior: 'smooth' });
+    }
+
     servicesNextBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (totalCards > visibleCards && isMobile()) {
-            currentIndex++;
-            if (currentIndex > maxIndex) {
-                currentIndex = 0; // Loop to start
-            }
-            updateCarousel();
+        const max = getMaxScrollLeft();
+        const left = servicesCarousel.scrollLeft;
+        if (left >= max - 8) {
+            scrollToLeft(0);
+        } else {
+            servicesCarousel.scrollBy({ left: getStep(), behavior: 'smooth' });
         }
     });
-    
-    // Previous button - infinite loop
+
     servicesPrevBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = Math.max(0, totalCards - visibleCards);
-        if (totalCards > visibleCards && isMobile()) {
-            currentIndex--;
-            if (currentIndex < 0) {
-                currentIndex = maxIndex; // Loop to end
-            }
-            updateCarousel();
+        const max = getMaxScrollLeft();
+        const left = servicesCarousel.scrollLeft;
+        if (left <= 8) {
+            scrollToLeft(max);
+        } else {
+            servicesCarousel.scrollBy({ left: -getStep(), behavior: 'smooth' });
         }
     });
-    
-    // Initialize after a short delay to ensure cards are rendered
-    setTimeout(() => {
-        updateCarousel();
-    }, 100);
-    
-    // Update on window resize
-    let resizeTimeout;
+
     window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            updateCarousel();
-        }, 250);
-    });
-    
-    // Also update when images/content loads
-    window.addEventListener('load', () => {
-        updateCarousel();
-    });
+        applyMode();
+    }, { passive: true });
 });
 
 // FAQ Accordion
@@ -1404,7 +1158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Specialty Tooltips - Toggle on click only
+// Specialty Tooltips - Show on hover and toggle on click
 document.addEventListener('DOMContentLoaded', () => {
     const specialtyWrappers = document.querySelectorAll('.specialty-tag-wrapper');
     
@@ -1418,7 +1172,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Temporarily make tooltip visible to measure
         const wasVisible = tooltip.style.visibility === 'visible' || 
-                          wrapper.classList.contains('active');
+                          wrapper.classList.contains('active') || 
+                          wrapper.matches(':hover');
         
         // Force tooltip to be visible temporarily for accurate measurements
         const originalDisplay = tooltip.style.display;
@@ -1581,16 +1336,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Adjust position on window resize (only for active tooltips)
+        // Adjust position on hover
+        wrapper.addEventListener('mouseenter', () => {
+            setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
+        });
+        
+        // Adjust position on window resize
         window.addEventListener('resize', () => {
-            if (wrapper.classList.contains('active')) {
+            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
                 setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 10);
             }
         });
         
         // Adjust position when tooltip becomes visible (for CSS transitions)
         const observer = new MutationObserver(() => {
-            if (wrapper.classList.contains('active')) {
+            if (wrapper.classList.contains('active') || wrapper.matches(':hover')) {
                 setTimeout(() => adjustTooltipPosition(tooltip, wrapper), 50);
             }
         });
@@ -1604,18 +1364,13 @@ document.addEventListener('DOMContentLoaded', () => {
             attributes: true,
             attributeFilter: ['class']
         });
-    });
-    
-    // Close tooltips when clicking outside (single handler for all tooltips)
-    document.addEventListener('click', (e) => {
-        // Check if click is outside any specialty wrapper
-        const clickedWrapper = e.target.closest('.specialty-tag-wrapper');
-        if (!clickedWrapper) {
-            // Close all tooltips if clicking outside
-            specialtyWrappers.forEach(wrapper => {
+        
+        // Close tooltip when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
                 wrapper.classList.remove('active');
-            });
-        }
+            }
+        });
     });
 });
 
