@@ -528,7 +528,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!carousel || !prevBtn || !nextBtn) return;
 
-    const isMobile = () => window.innerWidth <= 768;
+    // Treat any coarse-pointer device (iPhone/iPad) as 'mobile carousel' even in landscape
+    const isMobile = () =>
+        window.innerWidth <= 768 ||
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
 
     function applyMode() {
         if (!isMobile()) {
