@@ -1125,7 +1125,7 @@ section {
     pointer-events: none;
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
-    background-position: center bottom;
+    background-position: center 72%;
     background-size: min(360px, 88%) auto;
     /* Make edges feel softer + premium */
     filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16)) blur(0.6px);
