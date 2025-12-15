@@ -354,7 +354,7 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(245, 245, 245, 0.70);
+    background-color: rgba(245, 245, 245, 0.45);
     padding: 120px 0 80px;
     overflow: hidden;
     z-index: 9;
@@ -370,15 +370,13 @@ p {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background-image:
-        linear-gradient(180deg, rgba(245, 245, 245, 0.55) 0%, rgba(245, 245, 245, 0.18) 45%, rgba(245, 245, 245, 0.55) 100%),
-        var(--hero-photo);
+    background-image: var(--hero-photo);
     background-size: cover;
     background-position: center 22%;
     background-repeat: no-repeat;
-    opacity: 0.62;
+    opacity: 0.72;
     transform: scale(1.02);
-    filter: saturate(0.95) contrast(1.05);
+    filter: saturate(1.08) contrast(1.12) brightness(0.96);
 }
 
 .hero::after {
@@ -386,7 +384,9 @@ p {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: radial-gradient(80% 60% at 50% 35%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 60%);
+    background-image:
+        linear-gradient(180deg, rgba(245, 245, 245, 0.28) 0%, rgba(245, 245, 245, 0.08) 45%, rgba(245, 245, 245, 0.30) 100%),
+        radial-gradient(80% 60% at 50% 35%, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 60%);
     pointer-events: none;
 }
 
@@ -427,14 +427,14 @@ p {
     pointer-events: none;
     z-index: 7;
     overflow: hidden;
-    opacity: 0.18;
+    opacity: 0.12;
     transition: opacity 0.3s ease-out;
 }
 
 .smoke {
     position: absolute;
-    opacity: 0.18;
-    filter: blur(70px);
+    opacity: 0.12;
+    filter: blur(64px);
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
