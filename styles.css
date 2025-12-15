@@ -2929,10 +2929,13 @@ a:focus-visible {
 .pricing-carousel-wrapper {
     position: relative;
     margin-top: 80px;
-    padding: 0 100px;
-    max-width: 1400px;
+    /* Avoid fixed huge padding that can cause edge clipping on some viewports */
+    padding: 0 clamp(16px, 5vw, 80px);
+    max-width: min(1400px, 100%);
     margin-left: auto;
     margin-right: auto;
+    overflow: visible;
+    box-sizing: border-box;
 }
 
 .pricing-carousel {
