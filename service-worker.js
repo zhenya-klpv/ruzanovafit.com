@@ -16,7 +16,9 @@ const STATIC_ASSETS = [
     '/apple-touch-icon.png',
     // New site photos (keep only files that are guaranteed to exist)
     '/assets/photos/hero-stage.jpg',
+    '/assets/photos/hero-stage.webp',
     '/assets/photos/about-medal.jpg',
+    '/assets/photos/about-medal.webp',
     '/assets/photos/about-cutout.webp',
     '/assets/photos/hero-cutout.webp'
 ];

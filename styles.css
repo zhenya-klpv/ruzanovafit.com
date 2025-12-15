@@ -28,8 +28,8 @@
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 
     /* Site photos (drop files into /assets/photos/) */
-    --hero-photo: url("assets/photos/hero-stage.jpg");
-    --about-photo: url("assets/photos/about-medal.jpg");
+    --hero-photo: image-set(url("assets/photos/hero-stage.webp") type('image/webp'), url("assets/photos/hero-stage.jpg") type('image/jpeg'));
+    --about-photo: image-set(url("assets/photos/about-medal.webp") type('image/webp'), url("assets/photos/about-medal.jpg") type('image/jpeg'));
     /* Optional: transparent cutout for About (upload assets/photos/about-cutout.webp) */
     --about-cutout: url("assets/photos/about-cutout.webp");
     /* Premium: transparent cutout over Hero background */
