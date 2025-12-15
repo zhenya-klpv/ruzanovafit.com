@@ -24,6 +24,8 @@
     /* Site photos (drop files into /assets/photos/) */
     --hero-photo: url("assets/photos/hero-stage.jpg");
     --about-photo: url("assets/photos/about-medal.jpg");
+    /* Optional: transparent cutout for About (upload assets/photos/about-cutout.webp) */
+    --about-cutout: url("assets/photos/about-cutout.webp");
     /* Premium: transparent cutout over Hero background */
     --hero-cutout: url("assets/photos/hero-cutout.webp");
 
@@ -363,12 +365,12 @@ p {
     inset: 0;
     z-index: 0;
     background-image:
-        linear-gradient(180deg, rgba(245, 245, 245, 0.92) 0%, rgba(245, 245, 245, 0.70) 45%, rgba(245, 245, 245, 0.92) 100%),
+        linear-gradient(180deg, rgba(245, 245, 245, 0.55) 0%, rgba(245, 245, 245, 0.18) 45%, rgba(245, 245, 245, 0.55) 100%),
         var(--hero-photo);
     background-size: cover;
     background-position: center 22%;
     background-repeat: no-repeat;
-    opacity: 0.32;
+    opacity: 0.62;
     transform: scale(1.02);
     filter: saturate(0.95) contrast(1.05);
 }
@@ -378,7 +380,7 @@ p {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: radial-gradient(80% 60% at 50% 35%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 60%);
+    background: radial-gradient(80% 60% at 50% 35%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 60%);
     pointer-events: none;
 }
 
@@ -419,14 +421,14 @@ p {
     pointer-events: none;
     z-index: 7;
     overflow: hidden;
-    opacity: 0.42;
+    opacity: 0.18;
     transition: opacity 0.3s ease-out;
 }
 
 .smoke {
     position: absolute;
-    opacity: 0.42;
-    filter: blur(85px);
+    opacity: 0.18;
+    filter: blur(70px);
     will-change: transform;
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -1082,31 +1084,16 @@ section {
     justify-content: center;
     position: relative;
     overflow: hidden;
-    background-image:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.72) 100%),
-        var(--about-photo);
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-image: var(--about-cutout), var(--about-photo);
     background-size: cover;
-    background-position: center 20%;
+    background-position: center 22%;
     background-repeat: no-repeat;
 }
 
-.image-placeholder::before {
-    content: '';
-    position: absolute;
-    width: 60%;
-    height: 60%;
-    border: 1px solid var(--border-color);
-    opacity: 0.3;
-}
 
-.image-placeholder::after {
-    content: '';
-    position: absolute;
-    width: 40%;
-    height: 40%;
-    border: 1px solid var(--border-color);
-    opacity: 0.2;
-}
 
 .about-text h3 {
     font-size: 32px;
