@@ -15,4 +15,4 @@ Optional “removed background” (cutout) variant:
 If you want a premium look (transparent cutout over a clean background), export a transparent image:
 - hero-cutout.webp (WebP with alpha, transparent background)
 
-Then tell me and I’ll enable the cutout layer in HERO (no layout changes needed).
+Cutout is already supported in CSS. Upload the file and it will appear automatically.
