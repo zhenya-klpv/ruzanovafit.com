@@ -94,31 +94,40 @@ body {
         line-height: 1.7;
     }
     
-    /* Improved mobile spacing - priority for iPhone */
-    section {
-        padding: 100px 0 !important;
-        min-height: auto !important;
+    /* Improved mobile spacing - unified and proportional */
+    /* All sections except hero have unified top padding */
+    section:not(.hero) {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important; /* Dynamic viewport height for mobile */
+        display: flex !important;
+        flex-direction: column !important;
         height: auto !important;
-        display: block !important;
     }
     
     /* Add proper spacing between sections on mobile */
-    section + section {
+    section:not(.hero) + section:not(.hero) {
         margin-top: 0 !important;
-        padding-top: 100px !important;
+        padding-top: 60px !important;
+    }
+    
+    /* First section after hero */
+    .hero + section:not(.hero) {
+        padding-top: 60px !important;
     }
     
     .section-header {
-        margin-bottom: 60px;
+        margin-bottom: 40px;
         margin-top: 0;
-        padding-top: 60px;
+        padding-top: 0;
         padding-left: 0;
         padding-right: 0;
     }
     
-    /* First section after hero should have more spacing */
-    .hero + section .section-header {
-        padding-top: 60px;
+    /* First section after hero header spacing */
+    .hero + section:not(.hero) .section-header {
+        padding-top: 0;
     }
     
     .section-title {
@@ -1530,7 +1539,10 @@ section {
 
 @media (max-width: 768px) {
     .gallery {
-        padding: 60px 0;
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
     
     .instagram-gallery {
@@ -1542,7 +1554,10 @@ section {
 
 @media (max-width: 480px) {
     .gallery {
-        padding: 50px 0;
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
     
     .instagram-gallery {
@@ -1860,7 +1875,10 @@ section {
 
 @media (max-width: 480px) {
     .testimonials {
-        padding: 80px 0;
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
     
     .testimonials-carousel-wrapper {
@@ -2064,13 +2082,19 @@ section {
 
 @media (max-width: 768px) {
     .contact {
-        padding-bottom: 120px !important;
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
 }
 
 @media (max-width: 576px) {
     .contact {
-        padding-bottom: 100px !important;
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
 }
 
@@ -2692,9 +2716,25 @@ a:focus-visible {
     }
 }
 
+@media (max-width: 768px) {
+    .why-choose {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+    }
+}
+
 @media (max-width: 576px) {
     .why-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .why-choose {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
 }
 
@@ -3218,6 +3258,24 @@ a:focus-visible {
     margin: 0;
 }
 
+@media (max-width: 768px) {
+    .faq {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .faq {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+    }
+}
+
 /* Map Container */
 .map-container {
     margin-top: 15px;
@@ -3424,9 +3482,25 @@ a:focus-visible {
     }
 }
 
+@media (max-width: 768px) {
+    .booking {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+    }
+}
+
 @media (max-width: 576px) {
     .payment-methods {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .booking {
+        padding-top: 60px !important;
+        padding-bottom: 80px !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
     }
 }
 
