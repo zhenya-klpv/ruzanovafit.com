@@ -1407,20 +1407,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleActiveItem(item, siblings, tooltipSelector) {
-        closeAllTooltips();
         const tooltip = item.querySelector(tooltipSelector);
         if (!tooltip) return;
 
         const isActive = item.classList.contains('active');
+
+        // Second tap closes
+        if (isActive) {
+            item.classList.remove('active');
+            return;
+        }
+
+        // Open this one, close others
         siblings.forEach(s => {
             if (s !== item) s.classList.remove('active');
         });
 
-        item.classList.toggle('active', !isActive);
-
-        if (item.classList.contains('active')) {
-            setTimeout(() => adjustTooltipPosition(tooltip, item), 10);
-        }
+        item.classList.add('active');
+        setTimeout(() => adjustTooltipPosition(tooltip, item), 10);
     }
 
     specialtyWrappers.forEach(wrapper => {
@@ -1440,7 +1444,7 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.classList.remove('active');
         }, { capture: true });
 
-        specialtyTag.addEventListener('click', (e) => {
+        specialtyTag.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleActiveItem(wrapper, specialtyWrappers, '.specialty-tooltip');
@@ -1470,7 +1474,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.classList.remove('active');
         }, { capture: true });
 
-        item.addEventListener('click', (e) => {
+        item.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleActiveItem(item, certItems, '.cert-tooltip');
