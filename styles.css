@@ -4060,9 +4060,9 @@ section:not(.hero) + section:not(.hero) {
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center bottom;
-    transform: translateY(-5%);
+    object-fit: cover;
+    object-position: center 12%;
+    transform: translateY(0);
     filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16));
     -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
     mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
@@ -4079,6 +4079,32 @@ section:not(.hero) + section:not(.hero) {
 
 
 /* Hero style: reference (no banner) */
+
+/* Hero: CTA contrast tweaks */
+.hero .hero-subtitle-secondary {
+    color: var(--accent-color-pale) !important;
+    text-shadow: 0 10px 40px rgba(0,0,0,0.55);
+}
+
+.hero .btn-secondary {
+    border-color: rgba(255,255,255,0.88) !important;
+    color: rgba(255,255,255,0.96) !important;
+    background-color: rgba(255,255,255,0.10) !important;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.20);
+}
+.hero .btn-secondary::before {
+    background-color: var(--accent-color-pale) !important;
+}
+.hero .btn-secondary:hover {
+    border-color: var(--accent-color-pale) !important;
+    color: rgba(0,0,0,0.92) !important;
+}
+
+.hero .scroll-indicator {
+    color: var(--accent-color-pale) !important;
+    text-shadow: 0 14px 50px rgba(0,0,0,0.60);
+    filter: drop-shadow(0 10px 26px rgba(0,0,0,0.45));
+}
 .hero-content {
     background: transparent !important;
     border: 0 !important;
@@ -4094,10 +4120,14 @@ section:not(.hero) + section:not(.hero) {
     text-shadow: 0 10px 40px rgba(0,0,0,0.50), 0 1px 0 rgba(0,0,0,0.28);
 }
 
-.hero-subtitle,
-.hero-subtitle-secondary {
+.hero-subtitle {
     color: rgba(255,255,255,0.82) !important;
     text-shadow: 0 10px 40px rgba(0,0,0,0.45);
+}
+
+.hero-subtitle-secondary {
+    color: var(--accent-color-pale) !important;
+    text-shadow: 0 10px 40px rgba(0,0,0,0.55);
 }
 
 .hero::after {
@@ -4122,9 +4152,9 @@ section:not(.hero) + section:not(.hero) {
     pointer-events: none;
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
-    background-position: center 55%;
+    background-position: center 12%;
     background-size: cover;
-    transform: translateY(-5%) scale(1.02);
+    transform: translateY(0) scale(1.03);
     filter: blur(14px);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.30) 6%, rgba(0,0,0,0.85) 18%, #000 42%, #000 100%);
     mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.30) 6%, rgba(0,0,0,0.85) 18%, #000 42%, #000 100%);
