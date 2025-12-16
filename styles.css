@@ -1080,7 +1080,8 @@ section {
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
     background-position: center 84%;
-    background-size: min(360px, 88%) auto;
+    /* Make halo the same height as the image container (matches the <img> height) */
+    background-size: auto 100%;
     /* Make edges feel softer + premium */
     filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16)) blur(0.6px);
     /* Subtle fade at the very edges of the overlay */
@@ -4127,6 +4128,7 @@ section:not(.hero) + section:not(.hero) {
     filter: blur(14px);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.65) 18%, #000 42%, #000 100%);
     mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.65) 18%, #000 42%, #000 100%);
+    -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
     opacity: 0.55;
     z-index: 0;
