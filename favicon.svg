@@ -1,29 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Dumbbell icon">
-  <defs>
-    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#E0C07A"/>
-      <stop offset="1" stop-color="#B8860B"/>
-    </linearGradient>
-    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="#000" flood-opacity="0.20"/>
-    </filter>
-  </defs>
+  <!-- Bold black dumbbell (matches provided reference) -->
+  <g fill="#000">
+    <!-- Left plates -->
+    <rect x="12" y="46" width="16" height="36" rx="8"/>
+    <rect x="24" y="44" width="12" height="40" rx="6"/>
+    <rect x="34" y="48" width="10" height="32" rx="5"/>
 
-  <!-- Modern dumbbell: crisp silhouette + gold inlay -->
-  <g filter="url(#soft)">
-    <!-- plates -->
-    <rect x="14" y="46" width="18" height="36" rx="6" fill="#111"/>
-    <rect x="30" y="50" width="14" height="28" rx="5" fill="#111"/>
-    <rect x="84" y="50" width="14" height="28" rx="5" fill="#111"/>
-    <rect x="96" y="46" width="18" height="36" rx="6" fill="#111"/>
+    <!-- Handle -->
+    <rect x="44" y="60" width="40" height="8" rx="4"/>
 
-    <!-- handle -->
-    <rect x="44" y="58" width="40" height="12" rx="6" fill="#111"/>
-
-    <!-- gold inlay -->
-    <rect x="19" y="52" width="9" height="24" rx="4.5" fill="url(#gold)" opacity="0.95"/>
-    <rect x="46" y="61" width="36" height="6" rx="3" fill="url(#gold)" opacity="0.95"/>
-    <rect x="100" y="52" width="9" height="24" rx="4.5" fill="url(#gold)" opacity="0.95"/>
+    <!-- Right plates -->
+    <rect x="84" y="48" width="10" height="32" rx="5"/>
+    <rect x="92" y="44" width="12" height="40" rx="6"/>
+    <rect x="100" y="46" width="16" height="36" rx="8"/>
   </g>
 </svg>
-
