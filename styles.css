@@ -4074,19 +4074,19 @@ section:not(.hero) + section:not(.hero) {
 .has-about-cutout .image-placeholder::after {
     content: '';
     position: absolute;
-    inset: -6%;
+    inset: -9%;
     pointer-events: none;
     z-index: 0;
 
     /* Halo made from the cutout itself (very soft + premium) */
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
-    background-position: center top;
+    background-position: 48% 0%;
     background-size: contain;
 
-    transform: scale(1.06);
-    filter: blur(26px);
-    opacity: 0.42;
+    transform: translate(-2%, -2%) scale(1.10);
+    filter: blur(30px);
+    opacity: 0.50;
 
     /* Soft fade at top + edges so it never looks cut */
     -webkit-mask-image:
@@ -4180,12 +4180,12 @@ section:not(.hero) + section:not(.hero) {
 
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
-    background-position: center top;
+    background-position: 48% 0%;
     background-size: contain;
 
-    transform: scale(1.01);
+    transform: translate(-1%, -1%) scale(1.02);
     filter: blur(8px);
-    opacity: 0.02;
+    opacity: 0.018;
 }
 
 
