@@ -4072,7 +4072,28 @@ section:not(.hero) + section:not(.hero) {
 }
 
 .has-about-cutout .image-placeholder::after {
-    content: none;
+    content: '';
+    position: absolute;
+    inset: -6%;
+    pointer-events: none;
+    z-index: 0;
+
+    /* Big soft bloom (extra spread, no harsh edge) */
+    background-image:
+        radial-gradient(120% 80% at 50% 16%, rgba(230, 194, 0, 0.18) 0%, rgba(230, 194, 0, 0.00) 70%),
+        radial-gradient(120% 90% at 50% 62%, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.00) 70%);
+    filter: blur(44px);
+    opacity: 0.70;
+    transform: scale(1.12);
+
+    -webkit-mask-image: var(--about-cutout);
+    mask-image: var(--about-cutout);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center top;
+    mask-position: center top;
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 
 
@@ -4152,12 +4173,12 @@ section:not(.hero) + section:not(.hero) {
 
     /* Warm rim-light + soft shadow bloom */
     background-image:
-        radial-gradient(120% 70% at 50% 18%, rgba(230, 194, 0, 0.34) 0%, rgba(230, 194, 0, 0.00) 62%),
-        radial-gradient(120% 90% at 50% 58%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.00) 60%);
+        radial-gradient(120% 70% at 50% 18%, rgba(230, 194, 0, 0.26) 0%, rgba(230, 194, 0, 0.00) 62%),
+        radial-gradient(120% 90% at 50% 58%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.00) 60%);
 
-    filter: blur(18px);
-    opacity: 0.95;
-    transform: scale(1.04);
+    filter: blur(28px);
+    opacity: 0.78;
+    transform: scale(1.07);
 
     /* Use the cutout image as a mask so the glow matches the contour */
     -webkit-mask-image: var(--about-cutout);
