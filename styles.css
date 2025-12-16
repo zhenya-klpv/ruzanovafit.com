@@ -4062,8 +4062,8 @@ section:not(.hero) + section:not(.hero) {
     object-position: center top;
     transform: translateY(0);
     filter: drop-shadow(0 22px 70px rgba(0, 0, 0, 0.18))
-        drop-shadow(0 0 18px rgba(230, 194, 0, 0.20))
-        drop-shadow(0 0 36px rgba(230, 194, 0, 0.10));
+        drop-shadow(0 0 18px rgba(230, 194, 0, 0.06))
+        drop-shadow(0 0 36px rgba(230, 194, 0, 0.03));
     pointer-events: none;
 }
 
@@ -4074,17 +4074,18 @@ section:not(.hero) + section:not(.hero) {
 .has-about-cutout .image-placeholder::after {
     content: '';
     position: absolute;
-    inset: -14%;
+    inset: -18%;
     pointer-events: none;
     z-index: 0;
 
     /* Big soft bloom (extra spread, no harsh edge) */
     background-image:
-        radial-gradient(120% 80% at 50% 16%, rgba(230, 194, 0, 0.20) 0%, rgba(230, 194, 0, 0.00) 85%),
-        radial-gradient(120% 90% at 50% 62%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.00) 85%);
-    filter: blur(96px);
-    opacity: 0.68;
-    transform: scale(1.24);
+        radial-gradient(120% 85% at 50% 18%, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.00) 78%),
+        radial-gradient(120% 95% at 50% 60%, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.00) 82%);
+
+    filter: blur(120px);
+    opacity: 0.76;
+    transform: scale(1.28);
 
     -webkit-mask-image: var(--about-cutout);
     mask-image: var(--about-cutout);
@@ -4173,12 +4174,12 @@ section:not(.hero) + section:not(.hero) {
 
     /* Warm rim-light + soft shadow bloom */
     background-image:
-        radial-gradient(120% 70% at 50% 18%, rgba(230, 194, 0, 0.18) 0%, rgba(230, 194, 0, 0.00) 62%),
-        radial-gradient(120% 90% at 50% 58%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.00) 60%);
+        radial-gradient(120% 70% at 50% 18%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.00) 70%),
+        radial-gradient(120% 90% at 50% 58%, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.00) 72%);
 
-    filter: blur(52px);
-    opacity: 0.018;
-    transform: scale(1.14);
+    filter: blur(70px);
+    opacity: 0.015;
+    transform: scale(1.18);
 
     /* Use the cutout image as a mask so the glow matches the contour */
     -webkit-mask-image: var(--about-cutout);

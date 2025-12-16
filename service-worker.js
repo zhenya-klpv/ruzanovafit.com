@@ -2,7 +2,7 @@
 // Version 1.3.0
 
 // Bump cache name to force clients to refresh assets after deploys
-const CACHE_NAME = 'ruzanova-fitness-v21';
+const CACHE_NAME = 'ruzanova-fitness-v22';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
