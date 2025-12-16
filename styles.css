@@ -1085,8 +1085,6 @@ section {
     /* Make edges feel softer + premium */
     filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16)) blur(0.6px);
     /* Subtle fade at the very edges of the overlay */
-    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
-    mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
     opacity: 1;
 }
 
@@ -4060,12 +4058,12 @@ section:not(.hero) + section:not(.hero) {
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center 12%;
+    object-fit: contain;
+    object-position: center top;
     transform: translateY(0);
-    filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16));
-    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
-    mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
+    filter: drop-shadow(0 22px 70px rgba(0, 0, 0, 0.18))
+        drop-shadow(0 0 18px rgba(230, 194, 0, 0.20))
+        drop-shadow(0 0 36px rgba(230, 194, 0, 0.10));
     pointer-events: none;
 }
 
@@ -4144,24 +4142,32 @@ section:not(.hero) + section:not(.hero) {
 }
 
 
-/* About cutout halo blur */
+/* About cutout premium halo (follows cutout alpha) */
 .has-about-cutout .image-placeholder::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background-image: var(--about-cutout);
-    background-repeat: no-repeat;
-    background-position: center 12%;
-    background-size: cover;
-    transform: translateY(0) scale(1.03);
-    filter: blur(14px);
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.30) 6%, rgba(0,0,0,0.85) 18%, #000 42%, #000 100%);
-    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.30) 6%, rgba(0,0,0,0.85) 18%, #000 42%, #000 100%);
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-    opacity: 0.55;
     z-index: 0;
+
+    /* Warm rim-light + soft shadow bloom */
+    background-image:
+        radial-gradient(120% 70% at 50% 18%, rgba(230, 194, 0, 0.34) 0%, rgba(230, 194, 0, 0.00) 62%),
+        radial-gradient(120% 90% at 50% 58%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.00) 60%);
+
+    filter: blur(18px);
+    opacity: 0.95;
+    transform: scale(1.04);
+
+    /* Use the cutout image as a mask so the glow matches the contour */
+    -webkit-mask-image: var(--about-cutout);
+    mask-image: var(--about-cutout);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center top;
+    mask-position: center top;
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 
 .has-about-cutout .about-cutout-img {
