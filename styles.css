@@ -372,17 +372,10 @@ p {
     background-size: cover;
     background-position: center 22%;
     background-repeat: no-repeat;
-    opacity: 0.92;
-    transform: scale(1.02);
-    filter: saturate(1.06) contrast(1.12) brightness(0.96);
+    opacity: 0.58;
+    transform: scale(1.10);
+    filter: blur(18px) saturate(0.92) contrast(1.06) brightness(1.10);
 }
-
-.hero::after {
-    background-image:
-        radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0) 58%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0.10) 100%);
-}
-
 
 .hero::after {
     content: '';
@@ -390,9 +383,9 @@ p {
     inset: 0;
     z-index: 0;
     background-image:
-        radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0) 58%),
-        linear-gradient(180deg, rgba(245, 245, 245, 0.06) 0%, rgba(245, 245, 245, 0.02) 45%, rgba(245, 245, 245, 0.07) 100%),
-        radial-gradient(80% 60% at 50% 35%, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 62%);
+        radial-gradient(120% 90% at 50% 45%, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0) 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.32) 45%, rgba(255, 255, 255, 0.44) 100%),
+        radial-gradient(80% 60% at 50% 35%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0) 64%);
     pointer-events: none;
 }
 
@@ -2623,6 +2616,7 @@ a:focus-visible {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
 }
 
 
@@ -2736,12 +2730,13 @@ a:focus-visible {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
 }
 
 @media (max-width: 768px) {
     .specialty-tooltip {
         width: calc(100vw - 40px);
-        max-width: 280px;
+        max-width: 360px;
         font-size: 12px;
         left: 50%;
         transform: translateX(-50%) translateY(-10px);
@@ -2765,42 +2760,6 @@ a:focus-visible {
         /* Ensure tooltip doesn't overflow on wider mobile screens */
         left: 50%;
         right: auto;
-    }
-}
-
-/* Ensure tooltip stays within viewport on all devices */
-.specialty-tooltip {
-    max-width: min(280px, calc(100vw - 40px));
-    /* Prevent horizontal overflow */
-    box-sizing: border-box;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.specialty-tag-wrapper {
-    overflow: visible;
-    /* Ensure wrapper doesn't clip tooltip */
-    position: relative;
-}
-
-/* Prevent tooltip overflow on all devices */
-.specialty-tooltip {
-    /* Ensure tooltip respects viewport boundaries */
-    will-change: transform;
-    /* Prevent text overflow */
-    overflow-wrap: break-word;
-    hyphens: auto;
-}
-
-/* Additional safety for tooltip positioning */
-@media (max-width: 430px) {
-    .specialty-tooltip {
-        /* Ensure tooltip never exceeds viewport width */
-        max-width: calc(100vw - 40px) !important;
-        width: auto !important;
-        min-width: 0;
-        /* Better text wrapping on small screens */
-        word-break: break-word;
     }
 }
 
@@ -3929,6 +3888,41 @@ section:not(.hero) + section:not(.hero) {
 }
 
 
+
+
+/* Services coarse-pointer fallback (iOS landscape) */
+@media (pointer: coarse) {
+  .services-carousel-wrapper {
+    padding: 0 20px !important;
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+  .services-carousel {
+    overflow: visible !important;
+    max-width: 100% !important;
+  }
+  .services-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 20px !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    transition: none !important;
+    transform: none !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    max-width: 100% !important;
+  }
+  .services-grid::-webkit-scrollbar { display: none !important; }
+  .service-card {
+    flex: 0 0 calc(100% - 20px) !important;
+    min-width: calc(100% - 20px) !important;
+    max-width: calc(100% - 20px) !important;
+    scroll-snap-align: start !important;
+  }
+}
 /* Pricing coarse-pointer fallback (iOS landscape) */
 @media (pointer: coarse) {
   .pricing-carousel-wrapper {
@@ -4037,4 +4031,47 @@ section:not(.hero) + section:not(.hero) {
         overflow: hidden;
         margin-bottom: 18px;
     }
+}
+
+
+/* Premium readability panel for hero content */
+.hero-content {
+    background: rgba(255, 255, 255, 0.64);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 22px;
+    padding: clamp(18px, 3.2vw, 34px);
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.hero-title,
+.hero-subtitle,
+.hero-subtitle-secondary {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+
+/* Prefer <img> for About cutout so it never crops unexpectedly (only when asset exists) */
+.about-cutout-img {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    transform: translateY(20%);
+    filter: drop-shadow(0 18px 55px rgba(0, 0, 0, 0.16));
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
+    mask-image: radial-gradient(circle at 50% 45%, #000 62%, rgba(0,0,0,0.55) 78%, transparent 100%);
+    pointer-events: none;
+}
+
+.has-about-cutout .about-cutout-img {
+    display: block;
+}
+
+.has-about-cutout .image-placeholder::after {
+    content: none;
 }

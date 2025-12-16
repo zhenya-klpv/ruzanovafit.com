@@ -1421,6 +1421,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const tooltip = wrapper.querySelector('.specialty-tooltip');
         if (!specialtyTag || !tooltip) return;
 
+        // Allow closing by tapping the tooltip itself (common iOS expectation)
+        tooltip.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            wrapper.classList.remove('active');
+        });
+        tooltip.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            wrapper.classList.remove('active');
+        }, { capture: true });
+
         specialtyTag.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -1438,6 +1450,18 @@ document.addEventListener('DOMContentLoaded', () => {
     certItems.forEach(item => {
         const tooltip = item.querySelector('.cert-tooltip');
         if (!tooltip) return;
+
+        // Allow closing by tapping the tooltip itself
+        tooltip.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            item.classList.remove('active');
+        });
+        tooltip.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            item.classList.remove('active');
+        }, { capture: true });
 
         item.addEventListener('click', (e) => {
             e.preventDefault();
