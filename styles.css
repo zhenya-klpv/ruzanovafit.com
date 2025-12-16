@@ -4081,12 +4081,12 @@ section:not(.hero) + section:not(.hero) {
     /* Halo made from the cutout itself (very soft + premium) */
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
-    background-position: 48% 0%;
+    background-position: 48% -2%;
     background-size: contain;
 
-    transform: translate(-2%, -2%) scale(1.10);
-    filter: blur(30px);
-    opacity: 0.50;
+    transform: translate(-2%, -4%) scale(1.12);
+    filter: blur(32px);
+    opacity: 0.58;
 
     /* Soft fade at top + edges so it never looks cut */
     -webkit-mask-image:
@@ -4180,10 +4180,10 @@ section:not(.hero) + section:not(.hero) {
 
     background-image: var(--about-cutout);
     background-repeat: no-repeat;
-    background-position: 48% 0%;
+    background-position: 48% -2%;
     background-size: contain;
 
-    transform: translate(-1%, -1%) scale(1.02);
+    transform: translate(-1%, -2%) scale(1.02);
     filter: blur(8px);
     opacity: 0.018;
 }
