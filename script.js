@@ -1273,6 +1273,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (specialtyWrappers.length === 0 && certItems.length === 0) return;
 
+    const isTouch =
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+        (window.matchMedia && window.matchMedia('(hover: none)').matches);
+    if (!isTouch) return;
+
+
     // Function to adjust tooltip position to stay within viewport
     function adjustTooltipPosition(tooltip, wrapper) {
         if (!tooltip || !wrapper) return;
@@ -1401,6 +1407,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleActiveItem(item, siblings, tooltipSelector) {
+        closeAllTooltips();
         const tooltip = item.querySelector(tooltipSelector);
         if (!tooltip) return;
 
