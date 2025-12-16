@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
         img.onload = () => root.classList.add(cls);
         img.src = url + '?v=' + Date.now();
     };
-    test('/assets/photos/hero-cutout.webp', 'has-hero-cutout');
     test('/assets/photos/about-cutout.webp', 'has-about-cutout');
 });
 
@@ -530,6 +529,63 @@ if (!window.IntersectionObserver) {
     scrollHandlers.push(updateActiveNavLink);
 }
 
+
+function setupCarouselDots({ container, items, wrapper, label }) {
+    if (!container || !wrapper || !items || items.length <= 1) return;
+
+    let dots = wrapper.querySelector('.carousel-dots');
+    if (!dots) {
+        dots = document.createElement('div');
+        dots.className = 'carousel-dots';
+        wrapper.appendChild(dots);
+    }
+
+    dots.innerHTML = '';
+    const buttons = items.map((_, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'carousel-dot';
+        b.setAttribute('aria-label', `${label} ${idx + 1}`);
+        b.setAttribute('aria-current', idx === 0 ? 'true' : 'false');
+        b.addEventListener('click', () => {
+            const el = items[idx];
+            if (!el) return;
+            el.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dots.appendChild(b);
+        return b;
+    });
+
+    let raf = 0;
+    function updateActive() {
+        raf = 0;
+        const left = container.scrollLeft;
+        let bestIdx = 0;
+        let bestDist = Infinity;
+        for (let i = 0; i < items.length; i++) {
+            const el = items[i];
+            const dist = Math.abs(el.offsetLeft - left);
+            if (dist < bestDist) {
+                bestDist = dist;
+                bestIdx = i;
+            }
+        }
+        buttons.forEach((b, i) => b.setAttribute('aria-current', i === bestIdx ? 'true' : 'false'));
+    }
+
+    function onScroll() {
+        if (raf) return;
+        raf = requestAnimationFrame(updateActive);
+    }
+
+    container.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        updateActive();
+    }, { passive: true });
+
+    updateActive();
+}
+
 // Testimonials Carousel
 // Global standard:
 // - Desktop: grid (no JS slider)
@@ -560,12 +616,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!applyMode()) return;
 
+    setupCarouselDots({
+        container: carousel,
+        items: Array.from(carousel.querySelectorAll('.testimonial-card')),
+        wrapper: carousel.closest('.testimonials-carousel-wrapper'),
+        label: 'Testimonial'
+    });
+
     function getMaxScrollLeft() {
         return Math.max(0, carousel.scrollWidth - carousel.clientWidth);
     }
 
     function getStep() {
-        return Math.max(1, carousel.clientWidth);
+        const first = carousel.querySelector('.testimonial-card');
+        const styles = getComputedStyle(carousel);
+        const gap = parseFloat(styles.gap || styles.columnGap || '0') || 0;
+        const w = first ? first.getBoundingClientRect().width : carousel.clientWidth;
+        return Math.max(1, Math.round(w + gap));
     }
 
     function scrollToLeft(left) {
@@ -625,12 +692,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!applyMode()) return;
 
+    setupCarouselDots({
+        container: pricingCarousel,
+        items: Array.from(pricingCarousel.querySelectorAll('.pricing-card')),
+        wrapper: pricingCarousel.closest('.pricing-carousel-wrapper'),
+        label: 'Package'
+    });
+
     function maxScrollLeft() {
         return Math.max(0, pricingCarousel.scrollWidth - pricingCarousel.clientWidth);
     }
 
     function step() {
-        return Math.max(1, pricingCarousel.clientWidth);
+        const first = pricingCarousel.querySelector('.pricing-card');
+        const styles = getComputedStyle(pricingCarousel);
+        const gap = parseFloat(styles.gap || styles.columnGap || '0') || 0;
+        const w = first ? first.getBoundingClientRect().width : pricingCarousel.clientWidth;
+        return Math.max(1, Math.round(w + gap));
     }
 
     function scrollToLeft(left) {
@@ -673,7 +751,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!servicesCarousel || !servicesPrevBtn || !servicesNextBtn) return;
 
-    const isMobile = () => window.innerWidth <= 768;
+    const isMobile = () =>
+        window.innerWidth <= 768 ||
+        (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
 
     function applyMode() {
         if (!isMobile()) {
@@ -689,12 +769,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!applyMode()) return;
 
+    setupCarouselDots({
+        container: servicesCarousel,
+        items: Array.from(servicesCarousel.querySelectorAll('.service-card')),
+        wrapper: servicesCarousel.closest('.services-carousel-wrapper'),
+        label: 'Service'
+    });
+
     function getMaxScrollLeft() {
         return Math.max(0, servicesCarousel.scrollWidth - servicesCarousel.clientWidth);
     }
 
     function getStep() {
-        return Math.max(1, servicesCarousel.clientWidth);
+        const first = servicesCarousel.querySelector('.service-card');
+        const styles = getComputedStyle(servicesCarousel);
+        const gap = parseFloat(styles.gap || styles.columnGap || '0') || 0;
+        const w = first ? first.getBoundingClientRect().width : servicesCarousel.clientWidth;
+        return Math.max(1, Math.round(w + gap));
     }
 
     function scrollToLeft(left) {
@@ -765,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Plan names mapping
     const planNames = {
-        'starter': 'Starter',
+        'starter': 'Basic',
         'premium': 'Premium',
         'elite': 'Elite',
         'nutrition': 'Nutrition'

@@ -2,7 +2,7 @@
 // Version 1.3.0
 
 // Bump cache name to force clients to refresh assets after deploys
-const CACHE_NAME = 'ruzanova-fitness-v4';
+const CACHE_NAME = 'ruzanova-fitness-v5';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -20,7 +20,6 @@ const STATIC_ASSETS = [
     '/assets/photos/about-medal.jpg',
     '/assets/photos/about-medal.webp',
     '/assets/photos/about-cutout.webp',
-    '/assets/photos/hero-cutout.webp'
 ];
 
 // Install event - cache static assets
