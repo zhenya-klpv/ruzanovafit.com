@@ -1291,6 +1291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.marginRight = '';
         tooltip.style.marginTop = '';
         tooltip.style.marginBottom = '';
+        tooltip.style.removeProperty('--tooltip-arrow-x');
         // Defensive: never leave inline visibility/opacity on iOS (can cause stuck tooltips)
         tooltip.style.display = '';
         tooltip.style.visibility = '';
@@ -1363,43 +1364,27 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltip.style.marginBottom = '0';
             void tooltip.offsetWidth;
         }
-
         const wrapperCenterX = wrapperRect.left + wrapperRect.width / 2;
 
-        let finalLeft = '50%';
-        let finalTransform = 'translateX(-50%)';
+        // Horizontal clamp in viewport coordinates, then convert to wrapper-local coordinates.
+        // Tooltip is position:absolute inside wrapper, so left/right must be relative to wrapper (not viewport).
+        const minLeft = padLeft;
+        const maxLeft = Math.max(minLeft, viewportWidth - padRight - tooltipWidth);
+        const desiredLeft = wrapperCenterX - tooltipWidth / 2;
+        const clampedLeft = Math.min(Math.max(desiredLeft, minLeft), maxLeft);
 
-        if (wrapperCenterX - tooltipWidth / 2 < padLeft) {
-            finalLeft = padLeft + 'px';
-            finalTransform = 'translateX(0)';
-        } else if (wrapperCenterX + tooltipWidth / 2 > viewportWidth - padRight) {
-            finalLeft = 'auto';
-            tooltip.style.right = padRight + 'px';
-            finalTransform = 'translateX(0)';
-        }
+        // Wrapper-local px positioning
+        const localLeftPx = clampedLeft - wrapperRect.left;
+        tooltip.style.left = localLeftPx + 'px';
+        tooltip.style.right = '';
 
-        tooltip.style.left = finalLeft;
-        if (finalLeft === 'auto') {
-            tooltip.style.right = padRight + 'px';
-        } else {
-            tooltip.style.right = '';
-        }
+        // Arrow should point at the trigger (clamped within tooltip bounds)
+        let arrowX = wrapperCenterX - clampedLeft;
+        arrowX = Math.min(Math.max(arrowX, 18), tooltipWidth - 18);
+        tooltip.style.setProperty('--tooltip-arrow-x', arrowX + 'px');
 
         const verticalOffset = positionAbove ? 'translateY(-10px)' : 'translateY(10px)';
-        tooltip.style.transform = finalTransform + ' ' + verticalOffset;
-
-        void tooltip.offsetWidth;
-        const finalRect = tooltip.getBoundingClientRect();
-
-        if (finalRect.left < padLeft) {
-            tooltip.style.left = padLeft + 'px';
-            tooltip.style.right = '';
-            tooltip.style.transform = 'translateX(0) ' + verticalOffset;
-        } else if (finalRect.right > viewportWidth - padRight) {
-            tooltip.style.left = 'auto';
-            tooltip.style.right = padRight + 'px';
-            tooltip.style.transform = 'translateX(0) ' + verticalOffset;
-        }
+        tooltip.style.transform = 'translateX(0) ' + verticalOffset;
         // Restore non-positional inline styles so CSS controls visibility/opacity
         tooltip.style.display = originalDisplay || '';
         tooltip.style.visibility = originalVisibility || '';

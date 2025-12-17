@@ -2605,10 +2605,25 @@ a:focus-visible {
     content: '';
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: var(--tooltip-arrow-x, 50%);
     transform: translateX(-50%);
     border: 6px solid transparent;
     border-top-color: var(--white);
+}
+
+/* Tooltip positioned below (when it would go off top) */
+.cert-tooltip.tooltip-below {
+    bottom: auto;
+    top: 100%;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.cert-tooltip.tooltip-below::after {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: var(--white);
 }
 
 .cert-item.active .cert-tooltip {
@@ -2704,7 +2719,7 @@ a:focus-visible {
     content: '';
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: var(--tooltip-arrow-x, 50%);
     transform: translateX(-50%);
     border: 6px solid transparent;
     border-top-color: var(--white);
