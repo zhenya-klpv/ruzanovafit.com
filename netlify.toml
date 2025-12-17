@@ -3,6 +3,56 @@
   command = "echo 'No build step required'"
 
 [[redirects]]
+  from = "/booking.html"
+  to = "/booking.html"
+  status = 200
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots.txt"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+
+[[redirects]]
+  from = "/site.webmanifest"
+  to = "/site.webmanifest"
+  status = 200
+
+[[redirects]]
+  from = "/favicon.svg"
+  to = "/favicon.svg"
+  status = 200
+
+[[redirects]]
+  from = "/favicon-:size.png"
+  to = "/favicon-:size.png"
+  status = 200
+
+[[redirects]]
+  from = "/apple-touch-icon.png"
+  to = "/apple-touch-icon.png"
+  status = 200
+
+[[redirects]]
+  from = "/service-worker.js"
+  to = "/service-worker.js"
+  status = 200
+
+[[redirects]]
+  from = "/script.js"
+  to = "/script.js"
+  status = 200
+
+[[redirects]]
+  from = "/styles.css"
+  to = "/styles.css"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
