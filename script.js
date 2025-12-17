@@ -1279,6 +1279,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isTouch) return;
 
 
+    function resetTooltipInlineStyles(tooltip) {
+        if (!tooltip) return;
+        tooltip.classList.remove('tooltip-below');
+        tooltip.style.left = '';
+        tooltip.style.right = '';
+        tooltip.style.bottom = '';
+        tooltip.style.top = '';
+        tooltip.style.transform = '';
+        tooltip.style.marginLeft = '';
+        tooltip.style.marginRight = '';
+        tooltip.style.marginTop = '';
+        tooltip.style.marginBottom = '';
+        // Defensive: never leave inline visibility/opacity on iOS (can cause stuck tooltips)
+        tooltip.style.display = '';
+        tooltip.style.visibility = '';
+        tooltip.style.opacity = '';
+        tooltip.style.pointerEvents = '';
+    }
+
     // Function to adjust tooltip position to stay within viewport
     function adjustTooltipPosition(tooltip, wrapper) {
         if (!tooltip || !wrapper) return;
@@ -1295,13 +1314,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const padRight = basePad + safeRight;
         const padTop = basePad + safeTop;
         const padBottom = basePad + safeBottom;
-
-        // Temporarily make tooltip visible to measure
-        const wasVisible = tooltip.style.visibility === 'visible' || wrapper.classList.contains('active');
-
+        // Temporarily force tooltip into layout for measurement (don't leave inline visibility behind)
         const originalDisplay = tooltip.style.display;
         const originalVisibility = tooltip.style.visibility;
         const originalOpacity = tooltip.style.opacity;
+        const originalPointerEvents = tooltip.style.pointerEvents;
 
         tooltip.style.display = 'block';
         tooltip.style.visibility = 'hidden';
@@ -1383,27 +1400,22 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltip.style.right = padRight + 'px';
             tooltip.style.transform = 'translateX(0) ' + verticalOffset;
         }
-
-        if (wasVisible || wrapper.classList.contains('active')) {
-            tooltip.style.display = 'block';
-            tooltip.style.visibility = 'visible';
-            tooltip.style.opacity = '1';
-            const currentTransform = tooltip.style.transform;
-            if (currentTransform) {
-                tooltip.style.transform = currentTransform.replace(/translateY\([^)]+\)/g, 'translateY(0)');
-            }
-        } else {
-            tooltip.style.display = originalDisplay || '';
-            tooltip.style.visibility = originalVisibility || '';
-            tooltip.style.opacity = originalOpacity || '';
-        }
-
-        tooltip.style.pointerEvents = '';
+        // Restore non-positional inline styles so CSS controls visibility/opacity
+        tooltip.style.display = originalDisplay || '';
+        tooltip.style.visibility = originalVisibility || '';
+        tooltip.style.opacity = originalOpacity || '';
+        tooltip.style.pointerEvents = originalPointerEvents || '';
     }
 
     function closeAllTooltips() {
-        specialtyWrappers.forEach(w => w.classList.remove('active'));
-        certItems.forEach(i => i.classList.remove('active'));
+        specialtyWrappers.forEach(w => {
+            w.classList.remove('active');
+            resetTooltipInlineStyles(w.querySelector('.specialty-tooltip'));
+        });
+        certItems.forEach(i => {
+            i.classList.remove('active');
+            resetTooltipInlineStyles(i.querySelector('.cert-tooltip'));
+        });
     }
 
     function toggleActiveItem(item, siblings, tooltipSelector) {
@@ -1415,12 +1427,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Second tap closes
         if (isActive) {
             item.classList.remove('active');
+            resetTooltipInlineStyles(tooltip);
             return;
         }
 
         // Open this one, close others
         siblings.forEach(s => {
-            if (s !== item) s.classList.remove('active');
+            if (s === item) return;
+            s.classList.remove('active');
+            resetTooltipInlineStyles(s.querySelector(tooltipSelector));
         });
 
         item.classList.add('active');
@@ -1437,11 +1452,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             e.stopPropagation();
             wrapper.classList.remove('active');
+            resetTooltipInlineStyles(tooltip);
         });
         tooltip.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
             wrapper.classList.remove('active');
+            resetTooltipInlineStyles(tooltip);
         }, { capture: true });
 
         specialtyTag.addEventListener('pointerdown', (e) => {
@@ -1467,11 +1484,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             e.stopPropagation();
             item.classList.remove('active');
+            resetTooltipInlineStyles(tooltip);
         });
         tooltip.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
             item.classList.remove('active');
+            resetTooltipInlineStyles(tooltip);
         }, { capture: true });
 
         item.addEventListener('pointerdown', (e) => {
