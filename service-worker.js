@@ -1,7 +1,8 @@
 // Service Worker for caching static resources
-// Version 1.0.0
+// Version 1.3.0
 
-const CACHE_NAME = 'ruzanova-fitness-v1';
+// Bump cache name to force clients to refresh assets after deploys
+const CACHE_NAME = 'ruzanova-fitness-v27';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -12,7 +13,13 @@ const STATIC_ASSETS = [
     '/favicon.svg',
     '/favicon-32x32.png',
     '/favicon-16x16.png',
-    '/apple-touch-icon.png'
+    '/apple-touch-icon.png',
+    // New site photos (keep only files that are guaranteed to exist)
+    '/assets/photos/hero-stage.jpg',
+    '/assets/photos/hero-stage.webp',
+    '/assets/photos/about-medal.jpg',
+    '/assets/photos/about-medal.webp',
+    '/assets/photos/about-cutout.webp',
 ];
 
 // Install event - cache static assets
