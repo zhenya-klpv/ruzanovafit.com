@@ -1273,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Yelp Reviews Integration
 const YELP_BUSINESS_ID = 'elena-ruzanova-personal-trainer-and-nutritionist-san-jose';
-const YELP_BUSINESS_URL = 'https://www.yelp.com/biz/' + YELP_BUSINESS_ID;
+const YELP_BUSINESS_URL = 'https://www.yelp.com/biz/elena-ruzanova-personal-trainer-and-nutritionist-san-jose?utm_campaign=www_business_share_popup&utm_medium=copy_link&utm_source=(direct)';
 
 /**
  * Load Yelp Reviews

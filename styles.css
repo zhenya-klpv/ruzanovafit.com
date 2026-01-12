@@ -1626,6 +1626,29 @@ section {
     padding: 60px 40px;
 }
 
+.yelp-widget-container {
+    margin: 60px auto;
+    max-width: 100%;
+    padding: 0 20px;
+}
+
+.yelp-widget-container iframe {
+    max-width: 100%;
+    border: none;
+}
+
+#yelp-widget-container {
+    margin: 60px auto;
+    max-width: 100%;
+    padding: 0 20px;
+}
+
+#yelp-widget-container iframe,
+#yelp-widget-container div[id*="yelp"] {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
 .yelp-link-container {
     text-align: center;
     margin-top: 50px;
