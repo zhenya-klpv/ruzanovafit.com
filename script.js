@@ -994,7 +994,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Plan names mapping
     const planNames = {
-        'starter': 'Starter',
+        'basic': 'Basic Plan – Movement Fundamentals (3 Sessions)',
+        'starter': 'Basic Plan – Movement Fundamentals (3 Sessions)', // Legacy support
+        'premium': 'Premium Plan – Training + Nutrition Start-Up (6 Sessions + Meal Plan & Macros)',
+        'elite': 'Elite – Full Coaching Experience (12 Sessions)',
+        'nutrition': 'Nutrition Coaching – 3-Month Program (No Training Included)'
+    };
         'premium': 'Premium',
         'elite': 'Elite',
         'nutrition': 'Nutrition'
@@ -1266,6 +1271,193 @@ document.addEventListener('DOMContentLoaded', () => {
     loadInstagramPosts();
 });
 
+// Yelp Reviews Integration
+const YELP_BUSINESS_ID = 'elena-ruzanova-personal-trainer-and-nutritionist-san-jose';
+const YELP_BUSINESS_URL = 'https://www.yelp.com/biz/' + YELP_BUSINESS_ID;
+
+/**
+ * Load Yelp Reviews
+ * 
+ * Note: Yelp Fusion API requires a backend proxy due to CORS restrictions.
+ * You'll need to create a backend endpoint that:
+ * 1. Authenticates with Yelp API using your API key
+ * 2. Fetches reviews from Yelp
+ * 3. Returns JSON data to the frontend
+ * 
+ * Alternative: Use a third-party service like EmbedSocial, Elfsight, or Tagembed
+ */
+async function loadYelpReviews() {
+    const testimonialsGrid = document.getElementById('testimonialsGrid');
+    
+    if (!testimonialsGrid) return;
+    
+    // Configuration - Replace with your backend endpoint
+    const YELP_API_ENDPOINT = '/api/yelp-reviews'; // TODO: Replace with your backend endpoint
+    const USE_YELP_API = false; // Set to true when backend is ready
+    
+    // Fallback reviews (will show if API is not available)
+    const fallbackReviews = [
+        {
+            rating: 5,
+            text: "Working with this trainer changed my life! In 3 months I lost 33 lbs and feel incredible. The personalized approach and constant support is exactly what I needed!",
+            user: { name: "Maria K.", location: "Los Angeles, California" },
+            time_created: "2024-01-15",
+            url: YELP_BUSINESS_URL
+        },
+        {
+            rating: 5,
+            text: "Best trainer ever! Professional approach, excellent training and nutrition programs. Results exceeded all expectations. Highly recommend!",
+            user: { name: "John S.", location: "San Francisco, California" },
+            time_created: "2024-02-10",
+            url: YELP_BUSINESS_URL
+        },
+        {
+            rating: 5,
+            text: "Online training is a game changer! Convenient, effective, and always available. Thanks to this trainer, I achieved my goal training from home.",
+            user: { name: "Anna L.", location: "San Diego, California" },
+            time_created: "2024-03-05",
+            url: YELP_BUSINESS_URL
+        }
+    ];
+    
+    try {
+        if (USE_YELP_API) {
+            // Try to load from Yelp API (requires backend)
+            const response = await fetch(YELP_API_ENDPOINT);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.reviews && data.reviews.length > 0) {
+                    displayYelpReviews(data.reviews);
+                    return;
+                }
+            }
+        }
+        
+        // Optional: Load Yelp reviews from API if backend is ready
+        // For now, original reviews remain and Yelp reviews won't be loaded
+        // Uncomment below to show fallback Yelp reviews:
+        // displayYelpReviews(fallbackReviews);
+        
+    } catch (error) {
+        console.error('Error loading Yelp reviews:', error);
+        // On error, original reviews remain visible
+        // Yelp reviews simply won't be added
+    }
+}
+
+/**
+ * Display Yelp Reviews (adds to existing reviews)
+ */
+function displayYelpReviews(reviews) {
+    const yelpContainer = document.getElementById('yelpReviewsContainer');
+    
+    if (!yelpContainer || !reviews || reviews.length === 0) {
+        // Don't show error - just don't display Yelp reviews
+        // Original reviews will remain visible
+        return;
+    }
+    
+    // Clear container (in case of reload)
+    yelpContainer.innerHTML = '';
+    
+    // Display Yelp reviews after original reviews
+    reviews.forEach(review => {
+        const rating = review.rating || 5;
+        const text = review.text || '';
+        const userName = review.user?.name || 'Anonymous';
+        const userLocation = review.user?.location || 'California';
+        const reviewDate = formatReviewDate(review.time_created);
+        
+        const testimonialCard = document.createElement('div');
+        testimonialCard.className = 'testimonial-card yelp-review';
+        testimonialCard.innerHTML = `
+            <div class="testimonial-stars">
+                ${generateStars(rating)}
+            </div>
+            <p class="testimonial-text">"${text}"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar">
+                    <i class="fab fa-yelp" style="color: #ff1a1a;"></i>
+                </div>
+                <div class="author-info">
+                    <div class="author-name">${escapeHtml(userName)}</div>
+                    <div class="author-location">${escapeHtml(userLocation)}</div>
+                    ${reviewDate ? `<div class="review-date">${reviewDate}</div>` : ''}
+                </div>
+            </div>
+            ${review.url ? `
+            <div class="review-source">
+                <a href="${review.url}" target="_blank" rel="noopener noreferrer" class="review-yelp-link">
+                    <i class="fab fa-yelp"></i>
+                    <span>View on Yelp</span>
+                </a>
+            </div>
+            ` : ''}
+        `;
+        
+        yelpContainer.appendChild(testimonialCard);
+    });
+    
+    // Re-initialize carousel after loading reviews
+    if (typeof initTestimonialsCarousel === 'function') {
+        initTestimonialsCarousel();
+    }
+}
+
+/**
+ * Generate star HTML
+ */
+function generateStars(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    let starsHtml = '';
+    
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += '<i class="fas fa-star"></i>';
+    }
+    
+    if (hasHalfStar) {
+        starsHtml += '<i class="fas fa-star-half-alt"></i>';
+    }
+    
+    const emptyStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < emptyStars; i++) {
+        starsHtml += '<i class="far fa-star"></i>';
+    }
+    
+    return starsHtml;
+}
+
+/**
+ * Format review date
+ */
+function formatReviewDate(dateString) {
+    if (!dateString) return '';
+    
+    try {
+        const date = new Date(dateString);
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+        return `${months[date.getMonth()]} ${date.getFullYear()}`;
+    } catch (e) {
+        return '';
+    }
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Load Yelp reviews on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadYelpReviews();
+});
+
 // Payment Integration Instructions
 /*
  * TO INTEGRATE REAL PAYMENTS:
@@ -1380,17 +1572,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Service Accordion
+// Service Accordion & Pricing Accordion
 document.addEventListener('DOMContentLoaded', () => {
-    const accordionHeaders = document.querySelectorAll('.service-accordion .accordion-header');
+    // Service accordions
+    const serviceAccordionHeaders = document.querySelectorAll('.service-accordion .accordion-header');
     
-    accordionHeaders.forEach(header => {
+    serviceAccordionHeaders.forEach(header => {
         header.addEventListener('click', () => {
             const accordionItem = header.parentElement;
             const isActive = accordionItem.classList.contains('active');
             
-            // Close all accordions
-            document.querySelectorAll('.service-accordion .accordion-item').forEach(item => {
+            // Close all accordions in the same container
+            const container = accordionItem.closest('.service-accordion');
+            container.querySelectorAll('.accordion-item').forEach(item => {
                 item.classList.remove('active');
                 item.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
             });
@@ -1400,6 +1594,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 accordionItem.classList.add('active');
                 header.setAttribute('aria-expanded', 'true');
             }
+        });
+    });
+    
+    // Pricing accordions (independent per card)
+    const pricingAccordionHeaders = document.querySelectorAll('.pricing-accordion .accordion-header');
+    
+    pricingAccordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const accordionItem = header.parentElement;
+            const isActive = accordionItem.classList.contains('active');
+            
+            // Toggle clicked accordion (independent per pricing card)
+            accordionItem.classList.toggle('active');
+            header.setAttribute('aria-expanded', !isActive);
         });
     });
 });

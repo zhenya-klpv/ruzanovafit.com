@@ -1601,6 +1601,119 @@ section {
     border-bottom: none;
 }
 
+.testimonials-loading {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 80px 40px;
+    color: var(--text-light);
+}
+
+.testimonials-loading i {
+    font-size: 64px;
+    color: #ff1a1a; /* Yelp red color */
+    margin-bottom: 30px;
+    animation: pulse 2s infinite;
+}
+
+.testimonials-loading p {
+    font-size: 16px;
+    color: var(--text-light);
+}
+
+.testimonials-error {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 40px;
+}
+
+.yelp-link-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.yelp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background-color: var(--white);
+    border: 2px solid #ff1a1a;
+    color: #ff1a1a;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.yelp-link i {
+    font-size: 24px;
+}
+
+.yelp-link:hover {
+    background-color: #ff1a1a;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 26, 26, 0.3);
+}
+
+.review-source {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.review-source a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.review-source a:hover {
+    color: var(--accent-color-dark);
+}
+
+.review-date {
+    font-size: 12px;
+    color: var(--text-lighter);
+    margin-top: 5px;
+}
+
+.yelp-review {
+    position: relative;
+}
+
+.yelp-review .author-avatar {
+    background-color: rgba(255, 26, 26, 0.1);
+}
+
+.yelp-review .author-avatar i {
+    color: #ff1a1a;
+}
+
+.review-yelp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #ff1a1a;
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.review-yelp-link:hover {
+    color: #cc1414;
+}
+
+.review-yelp-link i {
+    font-size: 14px;
+}
+
 .testimonials-carousel-wrapper {
     position: relative;
     margin-top: 60px;
@@ -3018,7 +3131,7 @@ a:focus-visible {
 
 .pricing-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     padding-bottom: 30px;
     border-bottom: 1px solid var(--border-color);
 }
@@ -3026,8 +3139,147 @@ a:focus-visible {
 .pricing-header h3 {
     font-size: 28px;
     font-weight: 400;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: var(--text-dark);
+}
+
+.pricing-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.pricing-sessions {
+    font-size: 14px;
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.pricing-description {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-light);
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.pricing-accordion {
+    margin: 25px 0;
+}
+
+.pricing-accordion .accordion-item {
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.pricing-accordion .accordion-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.pricing-accordion .accordion-header {
+    width: 100%;
+    padding: 15px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.pricing-accordion .accordion-header:hover {
+    color: var(--accent-color);
+}
+
+.pricing-accordion .accordion-header i {
+    font-size: 12px;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.pricing-accordion .accordion-item.active .accordion-header i {
+    transform: rotate(180deg);
+}
+
+.pricing-accordion .accordion-item.active .accordion-header {
+    color: var(--accent-color);
+}
+
+.pricing-accordion .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0;
+}
+
+.pricing-accordion .accordion-item.active .accordion-content {
+    max-height: 1000px;
+    padding-bottom: 15px;
+    margin-top: 10px;
+}
+
+.pricing-accordion .pricing-features {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pricing-accordion .pricing-features li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.pricing-accordion .pricing-features li:last-child {
+    margin-bottom: 0;
+}
+
+.pricing-accordion .pricing-features i {
+    color: var(--accent-color);
+    font-size: 12px;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.pricing-accordion .pricing-features.not-included i {
+    color: var(--text-lighter);
+}
+
+.pricing-accordion .pricing-features.not-included li {
+    color: var(--text-lighter);
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.pricing-ideal {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-light);
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    font-style: italic;
+}
+
+.pricing-ideal strong {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-style: normal;
 }
 
 .price {
