@@ -90,87 +90,6 @@ function updateNavbar(scrollY) {
 
 scrollHandlers.push(updateNavbar);
 
-// Prevent gaps between sections during fast scroll - aggressive fix
-let lastSectionPositions = null;
-
-function preventSectionGaps(scrollY) {
-    const sections = document.querySelectorAll('section');
-    if (sections.length === 0) return;
-    
-    // Cache section positions to avoid recalculations
-    if (!lastSectionPositions || scrollY % 10 === 0) {
-        lastSectionPositions = Array.from(sections).map(section => ({
-            element: section,
-            top: section.offsetTop,
-            height: section.offsetHeight,
-            bottom: section.offsetTop + section.offsetHeight
-        }));
-    }
-    
-    sections.forEach((section, index) => {
-        if (index === 0) {
-            // First section - ensure it's at the top
-            section.style.marginTop = '0';
-            section.style.top = '0';
-            section.style.transform = 'translate3d(0, 0, 0)'; // Force GPU rendering
-            return;
-        }
-        
-        const prevSection = sections[index - 1];
-        if (!prevSection) return;
-        
-        // Get cached positions or calculate fresh
-        const prevPos = lastSectionPositions[index - 1];
-        const currentPos = lastSectionPositions[index];
-        
-        if (!prevPos || !currentPos) return;
-        
-        // Calculate expected and actual positions
-        const expectedTop = prevPos.bottom;
-        const actualTop = currentPos.top;
-        const gap = actualTop - expectedTop;
-        
-        // Force immediate correction if there's any gap
-        if (Math.abs(gap) > 0.5) {
-            // Use transform for smoother, GPU-accelerated positioning
-            const correction = expectedTop - actualTop;
-            section.style.transform = `translate3d(0, ${correction}px, 0)`;
-            section.style.marginTop = '0';
-            section.style.top = '0';
-            
-            // Update cached position
-            lastSectionPositions[index].top = expectedTop;
-            lastSectionPositions[index].bottom = expectedTop + currentPos.height;
-        } else {
-            // Reset transform if no gap
-            section.style.transform = 'translate3d(0, 0, 0)';
-            section.style.marginTop = '0';
-            section.style.top = '0';
-        }
-        
-        // Ensure background is solid and extends beyond bounds
-        const bgColor = window.getComputedStyle(section).backgroundColor;
-        if (bgColor === 'rgba(0, 0, 0, 0)' || bgColor === 'transparent') {
-            section.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-        }
-        
-        // Force repaint to prevent visual glitches
-        section.style.willChange = 'transform';
-    });
-}
-
-// Reset cache on resize
-let sectionGapsResizeTimeout;
-window.addEventListener('resize', () => {
-    clearTimeout(sectionGapsResizeTimeout);
-    sectionGapsResizeTimeout = setTimeout(() => {
-        lastSectionPositions = null;
-    }, 100);
-}, { passive: true });
-
-scrollHandlers.push(preventSectionGaps);
-
-
 // Single optimized scroll event listener
 window.addEventListener('scroll', () => {
     throttleScroll();
@@ -183,8 +102,8 @@ window.addEventListener('resize', () => {
     resizeTimeout = setTimeout(() => {
         cachedWindowHeight = window.innerHeight;
         cachedDocumentHeight = document.documentElement.scrollHeight;
-        sectionPositions = null; // Invalidate section cache
-        scrollButtonThreshold = 0; // Reset threshold
+        if (typeof sectionPositions !== 'undefined') sectionPositions = null;
+        scrollButtonThreshold = 0;
     }, 150);
 }, { passive: true });
 
@@ -999,10 +918,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'premium': 'Premium Plan – Training + Nutrition Start-Up (6 Sessions + Meal Plan & Macros)',
         'elite': 'Elite – Full Coaching Experience (12 Sessions)',
         'nutrition': 'Nutrition Coaching – 3-Month Program (No Training Included)'
-    };
-        'premium': 'Premium',
-        'elite': 'Elite',
-        'nutrition': 'Nutrition'
     };
     
     // Handle URL parameters for pre-selecting plan
