@@ -38,6 +38,7 @@
     <!-- Preload critical fonts for faster rendering -->
     <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvZDXbtY.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/photos/hero-stage.jpg" as="image">
     <!-- Optimized fonts: display=swap (shows fallback immediately), subset=latin (reduces file size) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap&subset=latin" rel="stylesheet">
     <!-- Preload critical CSS -->
@@ -209,6 +210,7 @@
                 <h1 class="hero-title">Transform Your Body</h1>
                 <p class="hero-subtitle">Personal Fitness Trainer in California</p>
                 <p class="hero-subtitle-secondary">Online Training Worldwide</p>
+                <p class="hero-urgency">Free consultation this week — limited spots</p>
                 <div class="hero-buttons">
                     <a href="#booking" class="btn btn-hero-primary">Start Training</a>
                     <a href="#about" class="btn btn-secondary">Learn More</a>
@@ -229,10 +231,9 @@
             </div>
             <div class="about-content">
                 <div class="about-image">
-                    <picture class="image-placeholder">
-                        <source srcset="/assets/photos/about-medal.webp" type="image/webp">
-                        <img src="/assets/photos/about-medal.jpg" alt="Alena Ruzanova - Personal fitness trainer and NPC Bikini Athlete" loading="lazy" width="500" height="600">
-                    </picture>
+                    <div class="about-image-cutout">
+                        <img src="/assets/photos/about-cutout.webp" alt="Alena Ruzanova - Personal fitness trainer" loading="lazy" width="500" height="600">
+                    </div>
                 </div>
                 <div class="about-text">
                     <h3>Hi, I'm Alena</h3>
@@ -1008,15 +1009,15 @@
                     <h3>Booking Request</h3>
                     <div class="form-group">
                         <label for="booking-name">Full Name *</label>
-                        <input type="text" id="booking-name" name="name" required>
+                        <input type="text" id="booking-name" name="name" required autocomplete="name" minlength="2">
                     </div>
                     <div class="form-group">
                         <label for="booking-email">Email *</label>
-                        <input type="email" id="booking-email" name="email" required>
+                        <input type="email" id="booking-email" name="email" required autocomplete="email">
                     </div>
                     <div class="form-group">
                         <label for="booking-phone">Phone *</label>
-                        <input type="tel" id="booking-phone" name="phone" required>
+                        <input type="tel" id="booking-phone" name="phone" required autocomplete="tel">
                     </div>
                     <div class="form-group">
                         <label for="booking-plan">Training Plan *</label>
@@ -1096,13 +1097,13 @@
                 </div>
                 <form class="contact-form" id="contactForm">
                     <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required autocomplete="name" minlength="2">
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required autocomplete="email">
                     </div>
                     <div class="form-group">
-                        <input type="tel" id="phone" name="phone" placeholder="Your Phone">
+                        <input type="tel" id="phone" name="phone" placeholder="Your Phone" autocomplete="tel">
                     </div>
                     <div class="form-group">
                         <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
@@ -1146,6 +1147,11 @@
             </div>
         </div>
     </footer>
+
+    <!-- Sticky CTA - mobile only -->
+    <div class="sticky-cta" id="stickyCta" aria-hidden="true">
+        <a href="#booking" class="btn btn-primary btn-block">Book Free Consultation</a>
+    </div>
 
     <!-- Scroll to Top Button -->
     <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top">

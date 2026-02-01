@@ -52,7 +52,13 @@
   to = "/styles.css"
   status = 200
 
-# Allow static assets (photos, etc.) to be served - must be before catch-all
+# API - must be before catch-all
+[[redirects]]
+  from = "/api/yelp-reviews"
+  to = "/.netlify/functions/yelp-reviews"
+  status = 200
+
+# Static assets (photos, etc.) - must be before catch-all
 [[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"
@@ -66,6 +72,17 @@
 
 [build.environment]
   NODE_VERSION = "18"
+
+# Security: CSP (Content Security Policy)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https://api.yelp.com https://api.emailjs.com; frame-src https://www.google.com;"
 
 [[headers]]
   for = "/assets/photos/*"
