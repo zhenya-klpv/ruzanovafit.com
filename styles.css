@@ -857,7 +857,7 @@ section {
     overflow: hidden !important;
     border-top: none !important;
     position: relative;
-    z-index: 9;
+    z-index: 15;
 }
 
 
@@ -890,9 +890,9 @@ section {
 
 /* About Section */
 .about {
-    background-color: rgba(255, 255, 255, 0.72);
+    background-color: rgba(255, 255, 255, 0.98);
     position: relative;
-    z-index: 9;
+    z-index: 15;
     overflow: hidden;
     min-height: 100vh;
     height: auto;
@@ -927,24 +927,40 @@ section {
 
 .about-image-cutout {
     width: 100%;
-    aspect-ratio: 5/6;
+    aspect-ratio: 4/5;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     overflow: hidden;
     background: linear-gradient(135deg, rgba(245,245,245,0.95) 0%, rgba(230,225,215,0.9) 30%, rgba(220,215,205,0.85) 60%, rgba(240,238,232,0.9) 100%);
     border-radius: 8px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    position: relative;
+}
+
+/* Soft fade at the bottom of the image */
+.about-image-cutout::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, rgba(240,238,232,1) 0%, rgba(240,238,232,0.8) 30%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
 }
 
 .about-image-cutout img {
-    max-width: 85%;
-    max-height: 100%;
+    max-width: 90%;
+    max-height: 95%;
     width: auto;
     height: auto;
     object-fit: contain;
     object-position: center bottom;
     filter: drop-shadow(0 8px 24px rgba(0,0,0,0.08));
+    position: relative;
+    z-index: 1;
 }
 
 .image-placeholder {
@@ -1128,14 +1144,14 @@ section {
 
 /* Services Section */
 .services {
-    background-color: rgba(245, 245, 245, 0.70);
+    background-color: rgba(245, 245, 245, 0.95);
     min-height: 100vh;
     height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
-    z-index: 10;
+    z-index: 15;
     margin: 0 !important;
     margin-top: 0 !important;
     padding: 160px 0;
@@ -1628,13 +1644,13 @@ section {
 
 /* Testimonials Section */
 .testimonials {
-    background-color: rgba(245, 245, 245, 0.70);
+    background-color: rgba(245, 245, 245, 0.95);
     padding: 160px 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
-    z-index: 10;
+    z-index: 15;
     overflow: hidden;
     margin: 0;
     border-top: none;
@@ -2128,9 +2144,9 @@ section {
 
 /* Contact Section */
 .contact {
-    background-color: rgba(255, 255, 255, 0.72);
+    background-color: rgba(255, 255, 255, 0.98);
     position: relative;
-    z-index: 9;
+    z-index: 15;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -2877,10 +2893,10 @@ a:focus-visible {
 
 /* Why Choose Me Section */
 .why-choose {
-    background-color: rgba(255, 255, 255, 0.72);
+    background-color: rgba(255, 255, 255, 0.98);
     padding: 160px 0;
     position: relative;
-    z-index: 9;
+    z-index: 15;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -2966,13 +2982,13 @@ a:focus-visible {
 
 /* Pricing Section */
 .pricing {
-    background-color: rgba(245, 245, 245, 0.70);
+    background-color: rgba(245, 245, 245, 0.95);
     padding: 160px 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
-    z-index: 10;
+    z-index: 15;
     overflow: visible;
     margin: 0;
     border-top: none;
@@ -3702,12 +3718,12 @@ a:focus-visible {
 
 /* Booking & Payment Section */
 .booking {
-    background-color: rgba(245, 245, 245, 0.70);
+    background-color: rgba(245, 245, 245, 0.95);
     padding: 160px 0;
     min-height: 100vh;
     display: flex;
     position: relative;
-    z-index: 10;
+    z-index: 15;
     flex-direction: column;
 }
 
