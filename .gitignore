@@ -1,22 +1,39 @@
-# Documentation files
-*.md
-DEPLOYMENT.md
-EMAIL_SETUP.md
-INSTAGRAM_SETUP.md
-OPTIMIZATION_GUIDE.md
-PERFORMANCE_IMPROVEMENTS.md
-QUICK_DEPLOY.md
-IMPROVEMENTS.md
-FAVICON_README.md
+# Dependencies
+node_modules
+.pnp
+.pnp.js
 
-# Development tools
-FAVICON_GENERATOR.html
-generate_favicons.py
-build-optimize.sh
+# Build
+.next
+out
+build
+dist
 
-# Temporary files
-favicon_new.svg
-*.log
+# Env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
 .DS_Store
 Thumbs.db
 
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
