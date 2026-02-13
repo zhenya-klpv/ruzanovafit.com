@@ -1,8 +1,7 @@
 import { Section, SectionHead } from "./Section";
 import Image from "next/image";
 
-const ABOUT_IMAGE =
-  "https://raw.githubusercontent.com/zhenya-klpv/ruzanovafit.com/main/assets/photos/about-cutout.webp";
+const ABOUT_IMAGE = "/images/about-cutout.webp";
 
 const pillars = [
   {
