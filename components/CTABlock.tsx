@@ -198,7 +198,7 @@ export function CTABlock() {
             Start with a personalized consultation to map your goals, current level, and the coaching path that fits you best.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-10">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-10">
             {pricing.map((p) => (
               <button
                 key={p.item}
@@ -216,29 +216,29 @@ export function CTABlock() {
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 mb-10">
             <button
               type="button"
               onClick={() => openRequest("General consultation")}
-              className="ds-btn-primary"
+              className="ds-btn-primary w-full sm:w-auto"
             >
               Request consultation
             </button>
             <a
               href="#security"
-              className="ds-btn-secondary"
+              className="ds-btn-secondary w-full sm:w-auto"
             >
               View credentials
             </a>
             <a
               href="mailto:info@ruzanovafit.com?subject=Consultation%20Request"
-              className="text-caption text-ink-muted underline hover:text-ink transition-colors uppercase tracking-[0.1em]"
+              className="text-caption text-center sm:text-left text-ink-muted underline hover:text-ink transition-colors uppercase tracking-[0.1em] py-1"
             >
               Email directly
             </a>
             <a
               href="/security/"
-              className="text-caption text-ink-muted underline hover:text-ink transition-colors uppercase tracking-[0.1em]"
+              className="text-caption text-center sm:text-left text-ink-muted underline hover:text-ink transition-colors uppercase tracking-[0.1em] py-1"
             >
               Read FAQ
             </a>
@@ -254,7 +254,7 @@ export function CTABlock() {
 
       {modalOpen && (
         <div
-          className="fixed inset-0 z-[70] bg-ink/40 backdrop-blur-sm px-4 py-6 sm:px-6 overflow-y-auto"
+          className="fixed inset-0 z-[70] bg-ink/40 backdrop-blur-sm px-3 sm:px-6 py-4 sm:py-6 overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-label="Package request form"
@@ -264,7 +264,7 @@ export function CTABlock() {
             }
           }}
         >
-          <div ref={modalRef} className="max-w-xl mx-auto ds-card-elevated p-6 md:p-7">
+          <div ref={modalRef} className="max-w-xl mx-auto ds-card-elevated p-4 sm:p-6 md:p-7 max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-3rem)] overflow-y-auto">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-label uppercase tracking-[0.14em] text-ink-subtle mb-2">
@@ -277,7 +277,7 @@ export function CTABlock() {
               <button
                 type="button"
                 onClick={closeModal}
-                className="ds-btn-secondary !px-3 !py-2"
+                className="ds-btn-secondary !px-3 !py-2 shrink-0"
                 aria-label="Close form"
               >
                 Close
@@ -422,13 +422,15 @@ export function CTABlock() {
                 />
               </div>
 
-              <div className="flex flex-wrap gap-3 pt-1">
-                <button type="submit" className="ds-btn-primary" disabled={isSending}>
+              <div className="sticky bottom-0 bg-surface/95 backdrop-blur py-3 -mx-2 px-2 sm:mx-0 sm:px-0">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button type="submit" className="ds-btn-primary w-full sm:w-auto" disabled={isSending}>
                   {isSending ? "Sending..." : "Send request"}
-                </button>
-                <button type="button" onClick={closeModal} className="ds-btn-secondary">
-                  Cancel
-                </button>
+                  </button>
+                  <button type="button" onClick={closeModal} className="ds-btn-secondary w-full sm:w-auto">
+                    Cancel
+                  </button>
+                </div>
               </div>
             </form>
 

@@ -17,7 +17,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`py-20 md:py-30 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto ${className}`}
+      className={`py-14 md:py-30 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto ${className}`}
       aria-label={ariaLabel}
     >
       {children}
@@ -39,7 +39,7 @@ export function SectionHead({
   const widthClass = maxWidth === "prose" ? "max-w-prose" : maxWidth === "narrow" ? "max-w-narrow" : "";
 
   return (
-    <header className={`mb-12 md:mb-16 ${widthClass}`}>
+    <header className={`mb-10 md:mb-16 ${widthClass}`}>
       {eyebrow && (
         <p className="text-label uppercase tracking-[0.18em] text-ink-subtle mb-3">
           {eyebrow}

@@ -85,6 +85,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   border: 1px solid rgba(154, 124, 78, 0.35);
   pointer-events: none;
 }

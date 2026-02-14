@@ -32,7 +32,7 @@ export function Philosophy() {
       />
       <div className="grid gap-8 lg:grid-cols-12 items-stretch mb-10">
         <div className="lg:col-span-5">
-          <div className="fog-frame mx-auto w-full max-w-[420px] lg:max-w-none h-[560px] flex items-end justify-center">
+          <div className="fog-frame mx-auto w-full max-w-[340px] sm:max-w-[420px] lg:max-w-none h-[440px] sm:h-[560px] flex items-end justify-center">
           <Image
             src={ABOUT_IMAGE}
             alt="Alena Ruzanova portrait"
@@ -43,7 +43,7 @@ export function Philosophy() {
           />
           </div>
         </div>
-        <div className="lg:col-span-7 ds-card-elevated p-6 md:p-8 flex flex-col justify-center min-h-[560px]">
+        <div className="lg:col-span-7 ds-card-elevated p-5 md:p-8 flex flex-col justify-center min-h-0 sm:min-h-[560px]">
           <p className="text-label uppercase tracking-[0.16em] text-ink-subtle mb-3">Coach profile</p>
           <p className="text-body text-ink-muted mb-3">
             NASM-certified personal trainer and nutrition coach with a science-first approach to body recomposition, strength, and confident movement.
