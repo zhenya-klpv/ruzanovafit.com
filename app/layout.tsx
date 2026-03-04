@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { StickyCTA } from "@/components/StickyCTA";
+
+const GA_MEASUREMENT_ID = "AW-17911504840";
 
 export const metadata: Metadata = {
   title: "Ruzanova Fitness — Personal Trainer in California",
@@ -22,6 +25,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className="min-h-screen flex flex-col editorial-shell">
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
         {children}
         <StickyCTA />
         <div className="h-20 md:h-0" aria-hidden />
