@@ -2,7 +2,6 @@
 
 import emailjs from "@emailjs/browser";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Section } from "./Section";
 
 const pricing = [
   { item: "Essentials", detail: "4 sessions / month", price: "$520" },
@@ -186,8 +185,11 @@ export function CTABlock() {
 
   return (
     <>
-      <Section id="contact" className="ds-panel" ariaLabel="Contact and next steps">
-        <div className="max-w-5xl mx-auto">
+      <section id="contact" aria-label="Contact and next steps" className="relative">
+        <div className="absolute inset-0 -z-10 min-h-full w-full bg-cover bg-left md:bg-center bg-no-repeat" style={{ backgroundImage: "url(/images/contact-bg.jpg)" }} aria-hidden />
+        <div className="absolute inset-0 -z-10 min-h-full w-full bg-gradient-to-b from-surface/92 via-surface/96 to-surface/98" aria-hidden />
+        <div className="relative max-w-6xl mx-auto py-14 md:py-24 lg:py-32 xl:py-40 px-4 sm:px-6 lg:px-8 md:min-h-[85vh] lg:min-h-[90vh] md:flex md:flex-col md:justify-center">
+          <div className="max-w-5xl mx-auto">
           <div className="text-center">
             <p className="text-label uppercase tracking-[0.16em] text-ink-subtle mb-2">Book now</p>
             <h2 className="text-headline font-semibold text-ink mb-2">
@@ -225,7 +227,7 @@ export function CTABlock() {
               Request consultation
             </button>
             <a
-              href="#security"
+              href="/security/#credentials"
               className="ds-btn-secondary w-full sm:w-auto"
             >
               View credentials
@@ -237,7 +239,7 @@ export function CTABlock() {
               Email directly
             </a>
             <a
-              href="/security/"
+              href="/security/#faq"
               className="text-caption text-center sm:text-left text-ink-muted underline hover:text-ink transition-colors uppercase tracking-[0.1em] py-1"
             >
               Read FAQ
@@ -250,7 +252,8 @@ export function CTABlock() {
             </p>
           </div>
         </div>
-      </Section>
+      </div>
+      </section>
 
       {modalOpen && (
         <div

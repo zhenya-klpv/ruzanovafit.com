@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { StickyCTA } from "@/components/StickyCTA";
 
 export const metadata: Metadata = {
   title: "Ruzanova Fitness — Personal Trainer in California",
@@ -20,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen flex flex-col editorial-shell">{children}</body>
+      <body className="min-h-screen flex flex-col editorial-shell">
+        {children}
+        <StickyCTA />
+        <div className="h-20 md:h-0" aria-hidden />
+      </body>
     </html>
   );
 }

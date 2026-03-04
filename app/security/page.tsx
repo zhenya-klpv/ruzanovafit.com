@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Section, SectionHead } from "@/components/Section";
+import { FaqWithMethod } from "@/components/FaqWithMethod";
 
 const faq = [
   {
@@ -44,51 +44,7 @@ export default function SecurityPage() {
         </div>
       </header>
       <main>
-        <Section>
-          <SectionHead
-            eyebrow="FAQ"
-            title="Questions clients ask before starting"
-            subtitle="Practical answers about coaching format, expectations, and next steps."
-            maxWidth="full"
-          />
-          <dl className="grid gap-4 md:grid-cols-2 max-w-5xl">
-            {faq.map((item) => (
-              <div key={item.q} className="ds-card p-5 md:p-6">
-                <dt className="text-title font-semibold text-ink mb-3">{item.q}</dt>
-                <dd className="text-body text-ink-muted">{item.a}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-12 pt-8 border-t border-surface-border max-w-5xl">
-            <h3 className="text-title font-semibold text-ink mb-4">Coaching principles</h3>
-            <ul className="grid gap-3 md:grid-cols-2 text-body text-ink-muted">
-              <li className="ds-card flex items-start gap-2 px-4 py-3">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
-                Personalized plans, not one-size-fits-all templates
-              </li>
-              <li className="ds-card flex items-start gap-2 px-4 py-3">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
-                Technique quality and safety come first
-              </li>
-              <li className="ds-card flex items-start gap-2 px-4 py-3">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
-                Sustainable progress over quick-fix intensity
-              </li>
-              <li className="ds-card flex items-start gap-2 px-4 py-3">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden />
-                Accountability and support through every phase
-              </li>
-            </ul>
-          </div>
-
-          <p className="mt-12 text-caption text-ink-subtle max-w-5xl">
-            For booking requests and coaching questions,{" "}
-            <a href="mailto:info@ruzanovafit.com?subject=Coaching%20Question" className="text-accent underline hover:no-underline">
-              email us
-            </a>.
-          </p>
-        </Section>
+        <FaqWithMethod faq={faq} />
       </main>
     </>
   );

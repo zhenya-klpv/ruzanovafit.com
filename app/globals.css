@@ -59,6 +59,8 @@ body {
   @apply mt-4;
 }
 
+/* Hero desktop: photo scales with 58vw zone (overridden by inline for size/position) */
+
 .editorial-shell {
   position: relative;
 }

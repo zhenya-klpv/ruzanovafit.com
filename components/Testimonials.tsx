@@ -107,8 +107,11 @@ export function Testimonials() {
   }, [remoteReviews]);
 
   return (
-    <Section id="testimonials" ariaLabel="Client testimonials">
-      <SectionHead
+    <section id="testimonials" aria-label="Client testimonials" className="relative">
+      <div className="absolute inset-0 -z-10 min-h-full w-full bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url(/images/testimonials-bg.jpg)" }} aria-hidden />
+      <div className="absolute inset-0 -z-10 min-h-full w-full bg-gradient-to-b from-surface/92 via-surface/96 to-surface/98" aria-hidden />
+      <div className="relative max-w-6xl mx-auto py-14 md:py-24 lg:py-32 xl:py-40 px-4 sm:px-6 lg:px-8 md:min-h-[85vh] lg:min-h-[90vh] md:flex md:flex-col md:justify-center">
+        <SectionHead
         eyebrow="Client voices"
         title="Results people can feel and sustain"
         subtitle="A light snapshot of what clients say after structured coaching and consistent execution."
@@ -134,15 +137,18 @@ export function Testimonials() {
           </article>
         ))}
       </div>
-      <p className="mt-6 text-caption text-ink-subtle">
-        {remoteReviews.length > 0
-          ? "Yelp reviews are loaded live and appended to curated client testimonials."
-          : reviewsError
-            ? "Live Yelp reviews are temporarily unavailable. Verified local testimonials remain visible."
-            : hasRemoteEndpoint
-              ? "Loading live Yelp reviews..."
-              : "Verified local testimonials are shown. Live Yelp feed can be enabled anytime."}
-      </p>
-    </Section>
+      <div className="mt-8 md:mt-10 lg:mt-12 ds-card p-5 max-w-5xl">
+        <p className="text-caption text-ink-muted">
+          {remoteReviews.length > 0
+            ? "Yelp reviews are loaded live and appended to curated client testimonials."
+            : reviewsError
+              ? "Live Yelp reviews are temporarily unavailable. Verified local testimonials remain visible."
+              : hasRemoteEndpoint
+                ? "Loading live Yelp reviews..."
+                : "Verified local testimonials are shown. Live Yelp feed can be enabled anytime."}
+        </p>
+      </div>
+      </div>
+    </section>
   );
 }

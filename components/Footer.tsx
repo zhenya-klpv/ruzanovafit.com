@@ -10,23 +10,23 @@ export function Footer() {
         <nav aria-label="Footer">
           <ul className="flex flex-wrap items-center gap-4 sm:gap-6 text-caption uppercase tracking-[0.1em]">
             <li>
-              <Link href="#about" className="text-ink-muted hover:text-ink transition-colors">
+              <Link href="/#about" className="text-ink-muted hover:text-ink transition-colors">
                 About
               </Link>
             </li>
             <li>
-              <Link href="#services" className="text-ink-muted hover:text-ink transition-colors">
+              <Link href="/#services" className="text-ink-muted hover:text-ink transition-colors">
                 Services
               </Link>
             </li>
             <li>
-              <Link href="#contact" className="text-ink-muted hover:text-ink transition-colors">
+              <Link href="/#contact" className="text-ink-muted hover:text-ink transition-colors">
                 Book
               </Link>
             </li>
             <li>
               <Link href="/security/" className="text-ink-muted hover:text-ink transition-colors">
-                FAQ
+                Info
               </Link>
             </li>
           </ul>

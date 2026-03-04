@@ -30,27 +30,25 @@ const steps = [
 export function HowItWorksSteps() {
   return (
     <div className="mt-10 md:mt-12 max-w-5xl">
-      <p className="text-label uppercase tracking-wider text-ink-subtle mb-6 text-center">
+      <p className="text-label uppercase tracking-[0.16em] text-ink-subtle mt-8 mb-4">
         Flow
       </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
         {steps.map((s) => (
-          <div
+          <li
             key={s.step}
-            className="group ds-card p-5 h-full min-h-[200px] flex flex-col ds-card-hover"
+            className="group ds-card p-5 min-h-[170px] flex flex-col ds-card-hover"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-ink text-surface text-caption font-semibold mb-3">
-              {s.step}
-            </span>
-            <h3 className="text-title font-semibold text-ink mb-2">{s.title}</h3>
-            <p className="text-caption text-ink-muted flex-1">{s.body}</p>
-            <p className="text-[11px] text-ink-subtle mt-0 max-h-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:mt-3 group-hover:max-h-14 group-hover:opacity-100">
+            <p className="ds-pill self-start ds-pill-accent-hover">Step {s.step}</p>
+            <h3 className="mt-3 text-title font-semibold text-ink leading-tight">{s.title}</h3>
+            <p className="mt-2 text-caption text-ink-muted">{s.body}</p>
+            <p className="text-[11px] text-ink-subtle mt-0 max-h-0 overflow-hidden opacity-0 transition-all duration-300 group-hover:mt-3 group-hover:max-h-16 group-hover:opacity-100">
               {s.detail}
             </p>
-          </div>
+          </li>
         ))}
-      </div>
-      <p className="mt-5 text-center text-caption text-ink-muted">
+      </ul>
+      <p className="mt-6 text-caption text-ink-subtle">
         Real support. Real structure. Real results.
       </p>
     </div>
