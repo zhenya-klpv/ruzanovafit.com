@@ -36,6 +36,20 @@ const credentialsPoints = [
   "Ongoing guidance and accountability between sessions",
 ];
 
+const certificates = [
+  { src: "/images/credentials/health-sciences-fundamentals.png", title: "Fundamentals of Health Coaching", issuer: "The Health Sciences Academy" },
+  { src: "/images/credentials/health-sciences-nutritional-therapist.png", title: "Nutritional Therapist", issuer: "The Health Sciences Academy" },
+  { src: "/images/credentials/dietetics-psoriasis.png", title: "Psoriasis: A New Look at an Old Problem", issuer: "School of Dietetics by Ekaterina Oksenyuk" },
+  { src: "/images/credentials/ace-nutritional-balance.png", title: "The 3D Approach to Finding Nutritional Balance", issuer: "ACE" },
+  { src: "/images/credentials/dietetics-microbiota.png", title: "Healing the Body Through Microbiota Rehabilitation", issuer: "School of Dietetics by Ekaterina Oksenyuk" },
+  { src: "/images/credentials/dietetics-psychology.png", title: "Psychological Features in Group Coaching for Weight Loss", issuer: "School of Dietetics by Ekaterina Oksenyuk" },
+  { src: "/images/credentials/only-natural-diet.png", title: "5-Day Intensive Course in Dietology", issuer: "Only natural diet / School of Dietetics" },
+  { src: "/images/credentials/nasm-nutrition-coach.png", title: "Certified Nutrition Coach", issuer: "NASM" },
+  { src: "/images/credentials/nasm-personal-trainer.png", title: "Personal Trainer Certificate", issuer: "NASM" },
+  { src: "/images/credentials/cpr-aed-asti.png", title: "CPR/AED (Adult / Child / Infant)", issuer: "American Safety Training Institute" },
+  { src: "/images/credentials/red-cross-first-aid-cpr.png", title: "Adult, Child and Baby First Aid/CPR/AED", issuer: "American Red Cross" },
+];
+
 const TAB_FROM_HASH: Record<string, "faq" | "method" | "workmodel" | "credentials" | "whoisfor"> = {
   faq: "faq",
   method: "method",
@@ -220,12 +234,31 @@ export function FaqWithMethod({ faq }: { faq: FaqItem[] }) {
             maxWidth="full"
           />
           <div className="max-w-5xl">
-            <TrustBadges />
-            <ul className="mt-8 grid gap-3 md:grid-cols-2 text-caption text-ink-muted">
+            <ul className="grid gap-3 md:grid-cols-2 text-caption text-ink-muted mb-8">
               {credentialsPoints.map((p) => (
                 <li key={p} className="ds-card flex items-start gap-2 px-4 py-3">
                   <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-accent shrink-0" aria-hidden />
                   <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+            <TrustBadges />
+            <h3 className="text-label uppercase tracking-[0.16em] text-ink-subtle mt-10 mb-4">Certificates</h3>
+            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
+              {certificates.map((cert) => (
+                <li key={cert.src} className="ds-card overflow-hidden p-0">
+                  <div className="aspect-[3/4] bg-surface-border/30 relative">
+                    <img
+                      src={cert.src}
+                      alt={`${cert.title} — ${cert.issuer}`}
+                      className="absolute inset-0 w-full h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-3 text-left">
+                    <p className="text-caption font-medium text-ink line-clamp-2">{cert.title}</p>
+                    <p className="text-[11px] text-ink-subtle mt-0.5">{cert.issuer}</p>
+                  </div>
                 </li>
               ))}
             </ul>
